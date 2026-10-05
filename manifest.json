@@ -1,0 +1,23 @@
+{
+  "name": "BUKAKI - St. Peter's Mighty Bukaki",
+  "short_name": "BUKAKI",
+  "description": "University of Eldoret Catholic Comrades community app",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FBF7F4",
+  "theme_color": "#7A1E2E",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
