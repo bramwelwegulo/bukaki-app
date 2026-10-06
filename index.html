@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#7A1E2E">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -186,6 +187,8 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sync.js"></script>
 
 <script>
 var SUPER_ADMIN_PHONE = '254701248814';
@@ -218,7 +221,7 @@ var LEADERSHIP_POSITIONS = [
   {role:'welfare_coordinator', desc:'Member support'},
   {role:'liturgy_coordinator', desc:'Prayer & liturgy'},
   {role:'superior_dad', desc:'Family oversight'},
-  {role:'superior_mum', desc:'Family oversight'},
+  {role:'superior_mum', desc:'Family oversight'}
 ];
 var EVENT_CATEGORIES = ['mass','liturgy','bible_study','outreach','okoa_bukaki','elders_bash','welcoming','picnic','jumuiya','prayer','fellowship','service','other'];
 var CAT_LABELS = {mass:'Mass',liturgy:'Liturgy',bible_study:'Bible Study',outreach:'Outreach',okoa_bukaki:'Okoa BUKAKI',elders_bash:"Elders' Bash",welcoming:'Welcoming',picnic:'Picnic',jumuiya:'Jumuiya',prayer:'Prayer',fellowship:'Fellowship',service:'Service',other:'Other'};
@@ -281,7 +284,6 @@ function seedDB(){
     {id:'f4',number:4,name:'St. Leo the Great',patron:'St. Leo the Great'},
     {id:'f5',number:5,name:'St. Thomas of Aquinas',patron:'St. Thomas Aquinas'}
   ];
-  var now = Date.now();
   return {
     families: families,
     members: [{
@@ -292,16 +294,8 @@ function seedDB(){
       joined_at:new Date().toISOString(), semester_joined:sem(),
       membership_years:2, oath_accepted_at:null, is_super_admin:true
     }],
-    events:[
-      {id:'e1',title:'Bible Study',description:'Scripture reflection, discussion and prayer.',category:'bible_study',starts_at:new Date(now+3*86400000).toISOString(),location:'Student Centre',semester:sem(),created_by:'admin'},
-      {id:'e2',title:'BUKAKI Service Day',description:'A day of Catholic social action and service.',category:'service',starts_at:new Date(now+12*86400000).toISOString(),location:'Community Outreach Centre',semester:sem(),created_by:'admin'},
-      {id:'e3',title:'Sunday Holy Mass & Fellowship',description:'Holy Mass followed by fellowship and community updates.',category:'mass',starts_at:new Date(now+5*86400000).toISOString(),location:'University Chapel',semester:sem(),created_by:'admin'}
-    ],
-    announcements:[
-      {id:'a1',title:'Welcome to the BUKAKI digital community',body:'Stay connected to Mass, fellowship, service, prayer and student leadership through this platform.',pinned:true,created_at:new Date(now-2*86400000).toISOString(),created_by:'admin'},
-      {id:'a2',title:'Keep the community in prayer',body:'Members are encouraged to submit prayer intentions and support one another respectfully.',pinned:false,created_at:new Date(now-5*86400000).toISOString(),created_by:'admin'}
-    ],
-    prayerIntentions:[], attendance:[], payments:[], loans:[], elections:[], candidacies:[], votes:[], warnings:[], amendments:[],
+    events:[], announcements:[], prayerIntentions:[], attendance:[], payments:[],
+    loans:[], elections:[], candidacies:[], votes:[], warnings:[], amendments:[],
     currentUserId:null
   };
 }
@@ -320,7 +314,7 @@ function loadDB(){
     return db;
   }catch(e){return seedDB();}
 }
-function saveDB(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){}}
+function saveDB(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){} if(window.cloudSave) window.cloudSave(DB);}
 var DB = loadDB();
 function isSA(m){return !!(m && (m.is_super_admin || m.phone === SUPER_ADMIN_PHONE));}
 function isAdmin(m){return isSA(m) || (m && ADMIN_ROLES.indexOf(m.role)!==-1);}
@@ -1108,7 +1102,21 @@ function render(){
   }
   document.getElementById('app').innerHTML = html;
 }
-render();
+(async function(){
+  if(window.cloudLoad){
+    try {
+      if(window.supabaseClient) await window.supabaseClient.auth.signInAnonymously();
+      var cloud = await window.cloudLoad();
+      if(cloud && cloud.families && cloud.families.length){
+        DB = cloud;
+        localStorage.setItem(DB_KEY, JSON.stringify(DB));
+      } else {
+        if(window.cloudSave) await window.cloudSave(DB);
+      }
+    } catch(e) { console.error('Cloud init failed', e); }
+  }
+  render();
+})();
 </script>
 </body>
-</html>
+  </html>
