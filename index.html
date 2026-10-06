@@ -180,7 +180,7 @@ textarea{resize:vertical;min-height:80px}
       <div class="topbar">
         <button class="topbar-btn" onclick="toggleSidebar()" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <div class="topbar-title" id="pageTitle">Dashboard</div>
-        <div class="topbar-actions"><button class="topbar-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg></button></div>
+        <div class="topbar-actions"><button class="topbar-btn" aria-label="Refresh" onclick="pullFromCloud()" title="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button></div>
       </div>
     </div>
     <main class="content" id="app"></main>
@@ -949,11 +949,10 @@ function viewAdmin(){
         h += '<button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button>';
         h += '</div></form></div>';
       } else {
-        var phoneDisplay2 = esc(m.phone);
         h += '<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'">';
         h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
         h += '<div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3>';
-        h += '<p>'+(ROLES[m.role]||m.role)+' · '+phoneDisplay2+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
+        h += '<p>'+(ROLES[m.role]||m.role)+' · '+esc(m.phone)+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
         h += '<span class="badge '+m.status+'">'+m.status+'</span>';
         h += '<div class="member-actions">';
         h += '<button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';
@@ -1173,6 +1172,30 @@ function render(){
   }
   document.getElementById('app').innerHTML = html;
 }
+var LAST_SYNC_ID = null;
+var REFRESHING = false;
+
+async function pullFromCloud(){
+  if(REFRESHING || !window.cloudLoad) return;
+  REFRESHING = true;
+  try {
+    var cloud = await window.cloudLoad();
+    if(cloud && cloud.families && cloud.families.length){
+      var cloudIds = (cloud.members||[]).map(function(m){return m.id;}).sort().join(',');
+      var cloudStamp = (cloud.members||[]).length + '|' + (cloud.events||[]).length + '|' + cloudIds;
+      if(cloudStamp !== LAST_SYNC_ID){
+        LAST_SYNC_ID = cloudStamp;
+        var wasUser = DB.currentUserId;
+        DB = cloud;
+        DB.currentUserId = wasUser;
+        localStorage.setItem(DB_KEY, JSON.stringify(DB));
+        render();
+      }
+    }
+  } catch(e) { console.error('Pull failed', e); }
+  REFRESHING = false;
+}
+
 (async function(){
   if(window.cloudLoad){
     try {
@@ -1181,12 +1204,18 @@ function render(){
       if(cloud && cloud.families && cloud.families.length){
         DB = cloud;
         localStorage.setItem(DB_KEY, JSON.stringify(DB));
+        var cloudIds = (cloud.members||[]).map(function(m){return m.id;}).sort().join(',');
+        LAST_SYNC_ID = (cloud.members||[]).length + '|' + (cloud.events||[]).length + '|' + cloudIds;
       } else {
         if(window.cloudSave) await window.cloudSave(DB);
       }
     } catch(e) { console.error('Cloud init failed', e); }
   }
   render();
+  setInterval(pullFromCloud, 20000);
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) pullFromCloud();
+  });
 })();
 </script>
 </body>
