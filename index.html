@@ -292,7 +292,8 @@ function seedDB(){
       diocese:'Bungoma', is_catholic:true, family_id:'f1',
       role: SUPER_ADMIN_ROLE, status:'active',
       joined_at:new Date().toISOString(), semester_joined:sem(),
-      membership_years:2, oath_accepted_at:null, is_super_admin:true
+      membership_years:2, oath_accepted_at:null, is_super_admin:true,
+      password:null
     }],
     events:[], announcements:[], prayerIntentions:[], attendance:[], payments:[],
     loans:[], elections:[], candidacies:[], votes:[], warnings:[], amendments:[],
@@ -342,7 +343,8 @@ var PAGE_TITLES = {
   dashboard:'Dashboard', members:'Members', families:'Families', events:'Events',
   announcements:'Announcements', prayer:'Prayer', attendance:'Attendance',
   contributions:'Contributions', leadership:'Leadership', admin:'Administrator',
-  constitution:'Constitution', elections:'Elections', directory:'Directory'
+  constitution:'Constitution', elections:'Elections', directory:'Directory',
+  register:'Join BUKAKI', login:'Sign in'
 };
 function go(r){location.hash=r;ROUTE=r;render();closeSidebar();window.scrollTo(0,0);}
 window.addEventListener('hashchange',function(){ROUTE=(location.hash||'#dashboard').slice(1);render();});
@@ -370,6 +372,8 @@ function saveEditedMember(e){
   m.diocese = document.getElementById('em_diocese').value;
   m.family_id = document.getElementById('em_family').value;
   m.is_catholic = document.getElementById('em_catholic').checked;
+  var newPass = document.getElementById('em_pass').value;
+  if(newPass && newPass.length >= 4) m.password = newPass;
   if(isSA(m)){
     m.is_super_admin = true;
     m.phone = SUPER_ADMIN_PHONE;
@@ -398,9 +402,14 @@ function assignLeadership(role, memberId){
 }
 function doLogin(){
   var phone = normPhone(document.getElementById('loginPhone').value);
+  var pass = document.getElementById('loginPass').value;
   var found = null;
   for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===phone){found=DB.members[i];break;}}
-  if(!found){toast('No member found.','error');return;}
+  if(!found){toast('No member found with that phone.','error');return;}
+  if(!isSA(found)){
+    if(!found.password){toast('No password set. Ask admin to reset.','error');return;}
+    if(found.password !== pass){toast('Wrong password.','error');return;}
+  }
   DB.currentUserId = found.id;
   saveDB();
   toast(isSA(found)?'★ Karibu Super Admin':'Karibu '+found.full_name);
@@ -456,7 +465,9 @@ function addMember(e){
     joined_at:new Date().toISOString(),
     semester_joined:sem(),
     membership_years:0,
-    oath_accepted_at:null
+    oath_accepted_at:null,
+    is_super_admin:false,
+    password: document.getElementById('mPass').value || null
   };
   if(!f.full_name||!f.phone){toast('Name and phone required.','error');return;}
   for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone already in use.','error');return;}}
@@ -550,7 +561,8 @@ function viewDashboard(){
     var h = '<div class="hero"><div class="hero-label">Welcome to BUKAKI</div>';
     h += '<h1>Growing together in faith and service.</h1>';
     h += '<p>A digital home for University of Eldoret Catholic comrades to connect, pray, serve and lead.</p>';
-    h += '<div class="hero-actions"><button class="hero-btn solid" onclick="go(\'events\')">'+icon('events')+' View events</button>';
+    h += '<div class="hero-actions"><button class="hero-btn solid" onclick="go(\'register\')">Join BUKAKI</button>';
+    h += '<button class="hero-btn" onclick="go(\'events\')">'+icon('events')+' View events</button>';
     h += '<button class="hero-btn" onclick="go(\'login\')">Sign in</button></div></div>';
     h += '<div class="stats-grid">';
     h += '<div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+activeCount+'</div></div>';
@@ -640,6 +652,7 @@ function viewMembers(){
         for(var si=0;si<statuses.length;si++) h += '<option value="'+statuses[si]+'"'+(m.status===statuses[si]?' selected':'')+'>'+statuses[si]+'</option>';
         h += '</select></label>';
       }
+      h += '<label class="field"><span>New Password (blank = keep)</span><input id="em_pass" type="text" placeholder="Leave blank to keep current"></label>';
       h += '</div>';
       h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';
       if(sa) h += '<p class="muted small mb">★ Super Admin phone and privileges are locked.</p>';
@@ -928,6 +941,7 @@ function viewAdmin(){
           for(var si=0;si<statuses.length;si++) h += '<option value="'+statuses[si]+'"'+(m.status===statuses[si]?' selected':'')+'>'+statuses[si]+'</option>';
           h += '</select></label>';
         }
+        h += '<label class="field"><span>New Password (blank = keep)</span><input id="em_pass" type="text" placeholder="Leave blank to keep current"></label>';
         h += '</div>';
         h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';
         if(sa) h += '<p class="muted small mb">★ Super Admin phone and privileges are locked.</p>';
@@ -1001,6 +1015,7 @@ function viewAdmin(){
     h += '<form onsubmit="addMember(event)">';
     h += '<label class="field"><span>Full name</span><input id="mName" required></label>';
     h += '<label class="field"><span>Phone</span><input id="mPhone" placeholder="07XX XXX XXX" required></label>';
+    h += '<label class="field"><span>Password (they use to log in)</span><input id="mPass" type="text" placeholder="e.g. bukaki2025"></label>';
     h += '<label class="field"><span>Reg. number</span><input id="mReg"></label>';
     h += '<label class="field"><span>Email</span><input id="mEmail" type="email"></label>';
     h += '<label class="field"><span>Year</span><select id="mYear">';
@@ -1068,15 +1083,73 @@ function viewAdmin(){
   h += '<p class="small">Signed in as '+esc(u.full_name)+' · '+(ROLES[u.role]||u.role)+'</p></div></div>';
   return h;
 }
+function viewRegister(){
+  var famOpts = DB.families.map(function(f){return '<option value="'+f.id+'">'+f.number+'. '+esc(f.name)+'</option>';}).join('');
+  var yearOpts = [1,2,3,4,5,6].map(function(y){return '<option value="'+y+'">Year '+y+'</option>';}).join('');
+  var dioOpts = ['Bungoma','Kakamega','Kitale','Other'].map(function(d){return '<option>'+d+'</option>';}).join('');
+  return '<div class="card" style="max-width:640px;margin:24px auto">'+
+    '<h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Join BUKAKI</h2>'+
+    '<p class="muted mb">Registration: '+fmtKES(FEES.registration)+' · Subscription: '+fmtKES(FEES.subscription)+'/semester</p>'+
+    '<form onsubmit="doRegister(event)">'+
+    '<div class="edit-form" style="margin:0 0 14px"><div class="grid2">'+
+    '<label class="field"><span>Full name *</span><input id="rName" required></label>'+
+    '<label class="field"><span>Phone (M-Pesa) *</span><input id="rPhone" type="tel" required placeholder="07XX XXX XXX"></label>'+
+    '<label class="field"><span>Password *</span><input id="rPass" type="password" required minlength="4" placeholder="Min 4 characters"></label>'+
+    '<label class="field"><span>Reg. number</span><input id="rReg" placeholder="e.g. EDS/325/21"></label>'+
+    '<label class="field"><span>Email</span><input id="rEmail" type="email"></label>'+
+    '<label class="field"><span>Year</span><select id="rYear">'+yearOpts+'</select></label>'+
+    '<label class="field"><span>Course</span><input id="rCourse"></label>'+
+    '<label class="field"><span>Diocese</span><select id="rDiocese">'+dioOpts+'</select></label>'+
+    '<label class="field"><span>Family</span><select id="rFamily">'+famOpts+'</select></label>'+
+    '</div></div>'+
+    '<label style="display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-bottom:14px"><input type="checkbox" id="rCatholic" checked style="width:auto;margin-top:3px"> I am a Catholic student (or accept the Catholic ethos, Art. 1.1.1)</label>'+
+    '<button type="submit" class="btn btn-primary btn-block">Pay '+fmtKES(FEES.registration)+' & Join</button>'+
+    '<p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'login\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">Already a member? Sign in</a></p>'+
+    '</form></div>';
+}
+function doRegister(e){
+  e.preventDefault();
+  var f = {
+    id: uid('m'),
+    full_name: document.getElementById('rName').value.trim(),
+    phone: normPhone(document.getElementById('rPhone').value),
+    reg_number: document.getElementById('rReg').value.trim() || null,
+    email: document.getElementById('rEmail').value.trim() || null,
+    year_of_study: Number(document.getElementById('rYear').value),
+    course: document.getElementById('rCourse').value.trim() || null,
+    diocese: document.getElementById('rDiocese').value,
+    is_catholic: document.getElementById('rCatholic').checked,
+    family_id: document.getElementById('rFamily').value,
+    role: 'member',
+    status: 'active',
+    joined_at: new Date().toISOString(),
+    semester_joined: sem(),
+    membership_years: 0,
+    oath_accepted_at: null,
+    is_super_admin: false,
+    password: document.getElementById('rPass').value
+  };
+  if(!f.full_name || !f.phone){toast('Name and phone are required.','error');return;}
+  if(!f.password || f.password.length < 4){toast('Password must be at least 4 characters.','error');return;}
+  for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone already registered. Please sign in.','error');return;}}
+  DB.members.push(f);
+  DB.payments.push({id:uid('p'),member_id:f.id,type:'registration',amount:FEES.registration,semester:sem(),mpesa_ref:'SIM'+Math.random().toString(36).slice(2,9).toUpperCase(),paid_at:new Date().toISOString()});
+  DB.currentUserId = f.id;
+  saveDB();
+  toast('Karibu '+f.full_name+'!');
+  go('dashboard');
+}
 function viewLogin(){
   return '<div class="card" style="max-width:440px;margin:24px auto">'+
     '<h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Sign in</h2>'+
-    '<p class="muted mb">Enter the phone number you registered with.</p>'+
+    '<p class="muted mb">Enter the phone number and password you registered with.</p>'+
     '<label class="field"><span>Phone number</span><input id="loginPhone" placeholder="07XX XXX XXX" type="tel" autocomplete="tel"></label>'+
+    '<label class="field"><span>Password</span><input id="loginPass" type="password" placeholder="Your password"></label>'+
     '<button class="btn btn-primary btn-block" onclick="doLogin()">Sign in</button>'+
+    '<p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'register\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">New here? Join BUKAKI</a></p>'+
     '<div style="background:#FDF6E3;border:1px solid #F5E6C0;border-radius:12px;padding:14px;margin-top:16px">'+
     '<p style="font-weight:600;color:var(--burgundy);font-size:13px">★ Super Admin (Vice Secretary)</p>'+
-    '<p class="muted small" style="margin-top:4px">Sign in with <b>0701248814</b> for full control.</p>'+
+    '<p class="muted small" style="margin-top:4px">Sign in with <b>0701248814</b> — no password needed.</p>'+
     '</div></div>';
 }
 function render(){
@@ -1086,6 +1159,7 @@ function render(){
   var html;
   switch(ROUTE){
     case 'login': html = viewLogin(); break;
+    case 'register': html = viewRegister(); break;
     case 'members': html = viewMembers(); break;
     case 'families': html = viewFamilies(); break;
     case 'events': html = viewEvents(); break;
@@ -1119,4 +1193,4 @@ function render(){
 })();
 </script>
 </body>
-  </html>
+</html>
