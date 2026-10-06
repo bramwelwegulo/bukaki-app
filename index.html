@@ -11,12 +11,7 @@
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --burgundy:#7A1E2E;--burgundy-dark:#5C1622;--burgundy-light:#9B2A3E;
-  --cream:#FBF7F4;--card:#fff;--border:#EDE5E0;
-  --text:#2C1810;--muted:#8B7B7B;--rose:#F5E4E6;--rose-text:#7A1E2E;
-  --gold:#C9A227;
-}
+:root{--burgundy:#7A1E2E;--burgundy-dark:#5C1622;--cream:#FBF7F4;--card:#fff;--border:#EDE5E0;--text:#2C1810;--muted:#8B7B7B;--rose:#F5E4E6;--rose-text:#7A1E2E;--gold:#C9A227;}
 body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--cream);color:var(--text);line-height:1.5;min-height:100vh}
 .shell{display:flex;min-height:100vh}
 .sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--burgundy-dark);color:#fff;z-index:100;transform:translateX(-100%);transition:transform .25s ease;display:flex;flex-direction:column;overflow-y:auto}
@@ -85,7 +80,6 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background
 .badge.revoked{background:#FEE2E2;color:#991B1B}
 .badge.reinstated{background:#DBEAFE;color:#1E40AF}
 .badge.super{background:var(--gold);color:#fff}
-.badge.exec{background:var(--rose);color:var(--burgundy)}
 .ann-item{padding:16px 0;border-bottom:1px solid var(--border)}
 .ann-item:last-child{border-bottom:none;padding-bottom:0}
 .ann-item:first-child{padding-top:0}
@@ -104,9 +98,7 @@ textarea{resize:vertical;min-height:80px}
 .btn-outline{background:#fff;border:1px solid var(--border);color:var(--text)}
 .btn-outline:hover{background:#FAF6F3}
 .btn-danger{background:#FEE2E2;color:#991B1B}
-.btn-danger:hover{background:#FECACA}
 .btn-success{background:#16A34A;color:#fff}
-.btn-success:hover{background:#15803D}
 .btn-sm{padding:7px 12px;font-size:12px;border-radius:9px}
 .btn-sm svg{width:14px;height:14px}
 .btn-block{width:100%}
@@ -121,11 +113,9 @@ textarea{resize:vertical;min-height:80px}
 .muted{color:var(--muted);font-size:13px}
 .small{font-size:12px}
 .mb{margin-bottom:16px}
-.mt{margin-top:16px}
-.right{text-align:right}
 .hidden{display:none}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;color:#fff;font-size:14px;font-weight:500;z-index:200;box-shadow:0 8px 20px rgba(0,0,0,.2);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90vw}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;color:#fff;font-size:14px;font-weight:500;z-index:200;box-shadow:0 8px 20px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1}
 .toast.success{background:var(--burgundy)}
 .toast.error{background:#DC2626}
 .access-card{background:#FDF6E3;border:1px solid #F5E6C0;border-radius:16px;padding:20px;display:flex;gap:14px;align-items:center}
@@ -195,75 +185,17 @@ var SUPER_ADMIN_PHONE = '254701248814';
 var SUPER_ADMIN_NAME = 'Vice Secretary';
 var SUPER_ADMIN_ROLE = 'vice_secretary';
 var FEES = { registration: 70, subscription: 30, reinstatement: 70 };
-var ROLES = {
-  member:'Member', family_head_dad:'Family Dad', family_head_mum:'Family Mum',
-  family_treasurer:'Family Treasurer', family_secretary:'Family Secretary',
-  chairperson:'Chairperson', vice_chairperson:'Vice Chairperson',
-  secretary:'Secretary', vice_secretary:'Vice Secretary',
-  treasurer:'Treasurer', organizing_secretary:'Organizing Secretary',
-  project_coordinator:'Project Coordinator', welfare_coordinator:'Welfare Coordinator',
-  superior_dad:'Superior Dad', superior_mum:'Superior Mum',
-  year_rep:'Year Representative', patron:'Patron', matron:'Matron',
-  liturgy_coordinator:'Liturgy Coordinator', spiritual_advisor:'Spiritual Advisor', welfare:'Welfare'
-};
+var ROLES = { member:'Member', family_head_dad:'Family Dad', family_head_mum:'Family Mum', family_treasurer:'Family Treasurer', family_secretary:'Family Secretary', chairperson:'Chairperson', vice_chairperson:'Vice Chairperson', secretary:'Secretary', vice_secretary:'Vice Secretary', treasurer:'Treasurer', organizing_secretary:'Organizing Secretary', project_coordinator:'Project Coordinator', welfare_coordinator:'Welfare Coordinator', superior_dad:'Superior Dad', superior_mum:'Superior Mum', year_rep:'Year Representative', patron:'Patron', matron:'Matron', liturgy_coordinator:'Liturgy Coordinator', spiritual_advisor:'Spiritual Advisor', welfare:'Welfare' };
 var EXEC_ROLES = ['chairperson','vice_chairperson','secretary','vice_secretary','treasurer','organizing_secretary','project_coordinator','welfare_coordinator','superior_dad','superior_mum','liturgy_coordinator','spiritual_advisor'];
 var FINANCE_ROLES = ['treasurer','chairperson','vice_chairperson','project_coordinator'];
 var ADMIN_ROLES = ['chairperson','vice_chairperson','secretary','vice_secretary','superior_dad','superior_mum'];
-var LEADERSHIP_POSITIONS = [
-  {role:'spiritual_advisor', desc:'Chaplain / Catholic adviser'},
-  {role:'chairperson', desc:'Student leadership'},
-  {role:'vice_chairperson', desc:'Deputy leadership'},
-  {role:'secretary', desc:'Administration & communication'},
-  {role:'vice_secretary', desc:'Assistant administration'},
-  {role:'treasurer', desc:'Finance & accountability'},
-  {role:'organizing_secretary', desc:'Liturgy & organizing'},
-  {role:'project_coordinator', desc:'Projects & loans'},
-  {role:'welfare_coordinator', desc:'Member support'},
-  {role:'liturgy_coordinator', desc:'Prayer & liturgy'},
-  {role:'superior_dad', desc:'Family oversight'},
-  {role:'superior_mum', desc:'Family oversight'}
-];
+var LEADERSHIP_POSITIONS = [{role:'spiritual_advisor',desc:'Chaplain / Catholic adviser'},{role:'chairperson',desc:'Student leadership'},{role:'vice_chairperson',desc:'Deputy leadership'},{role:'secretary',desc:'Administration & communication'},{role:'vice_secretary',desc:'Assistant administration'},{role:'treasurer',desc:'Finance & accountability'},{role:'organizing_secretary',desc:'Liturgy & organizing'},{role:'project_coordinator',desc:'Projects & loans'},{role:'welfare_coordinator',desc:'Member support'},{role:'liturgy_coordinator',desc:'Prayer & liturgy'},{role:'superior_dad',desc:'Family oversight'},{role:'superior_mum',desc:'Family oversight'}];
 var EVENT_CATEGORIES = ['mass','liturgy','bible_study','outreach','okoa_bukaki','elders_bash','welcoming','picnic','jumuiya','prayer','fellowship','service','other'];
 var CAT_LABELS = {mass:'Mass',liturgy:'Liturgy',bible_study:'Bible Study',outreach:'Outreach',okoa_bukaki:'Okoa BUKAKI',elders_bash:"Elders' Bash",welcoming:'Welcoming',picnic:'Picnic',jumuiya:'Jumuiya',prayer:'Prayer',fellowship:'Fellowship',service:'Service',other:'Other'};
 var VALUES = ['Fear of the Mighty God','Unity','Respectfulness','Transparency','Love','Accountability','Faithfulness','Prayerfulness','Servanthood','Integrity'];
-var OBJECTIVES = [
-  'Proclaim and teach the gospel of our Lord Jesus Christ among the young people.',
-  'Inculcate a spirit of living a clean life among young people.',
-  'Proclaim the Gospel from an interdenominational platform.',
-  'Disseminate the Gospel through publications and public evangelistic meetings.',
-  'Train disciples and educate young people to assist their denominations.',
-  'Promote, uphold and defend Christian principles, values and norms.',
-  'Contribute Christian perspective within University and society.',
-  'Do all other things incidental to the attainment of the forgoing objectives.'
-];
-var VERSIONS = [
-  {v:'2024', d:'2024-11-01', s:'Mission & Vision added; Superior Heads, Family Heads, Year Reps introduced; Families formalized.'},
-  {v:'2012', d:'2012-11-01', s:'Name changed BUKDISA to BUKAKI; motto revised; Liturgy Coordinator position revised.'},
-  {v:'2007', d:'2007-11-01', s:'Initial drafting by Khisa Alfred Simiyu committee.'}
-];
-function icon(name){
-  var p = {
-    dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
-    members:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
-    families:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-    events:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
-    announcements:'<path d="M3 11l18-8v18l-18-8zM3 11v2a2 2 0 0 0 2 2h1"/><path d="M11 18a2 2 0 1 1-4 0"/>',
-    prayer:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
-    attendance:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-    contributions:'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
-    leadership:'<path d="M3 8l4 3 5-7 5 7 4-3v10H3zM5 21h14"/>',
-    admin:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
-    constitution:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M8 7h8M8 11h6"/>',
-    elections:'<path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>',
-    directory:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><circle cx="12" cy="11" r="3"/><path d="M6 17c1.5-2 4-3 6-3s4.5 1 6 3"/>',
-    arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
-    check:'<path d="M20 6L9 17l-5-5"/>',
-    plus:'<path d="M12 5v14M5 12h14"/>',
-    trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
-    edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>'
-  };
-  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(p[name]||'')+'</svg>';
-}
+var OBJECTIVES = ['Proclaim and teach the gospel of our Lord Jesus Christ among the young people.','Inculcate a spirit of living a clean life among young people.','Proclaim the Gospel from an interdenominational platform.','Disseminate the Gospel through publications and public evangelistic meetings.','Train disciples and educate young people to assist their denominations.','Promote, uphold and defend Christian principles, values and norms.','Contribute Christian perspective within University and society.','Do all other things incidental to the attainment of the forgoing objectives.'];
+var VERSIONS = [{v:'2024',d:'2024-11-01',s:'Mission & Vision added; Superior Heads, Family Heads, Year Reps introduced; Families formalized.'},{v:'2012',d:'2012-11-01',s:'Name changed BUKDISA to BUKAKI; motto revised; Liturgy Coordinator position revised.'},{v:'2007',d:'2007-11-01',s:'Initial drafting by Khisa Alfred Simiyu committee.'}];
+function icon(n){var p={dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',members:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',families:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',events:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',announcements:'<path d="M3 11l18-8v18l-18-8zM3 11v2a2 2 0 0 0 2 2h1"/><path d="M11 18a2 2 0 1 1-4 0"/>',prayer:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',attendance:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',contributions:'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',leadership:'<path d="M3 8l4 3 5-7 5 7 4-3v10H3zM5 21h14"/>',admin:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',constitution:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M8 7h8M8 11h6"/>',elections:'<path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>',directory:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><circle cx="12" cy="11" r="3"/><path d="M6 17c1.5-2 4-3 6-3s4.5 1 6 3"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',check:'<path d="M20 6L9 17l-5-5"/>',plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>'};return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(p[n]||'')+'</svg>';}
 function sem(){var d=new Date();return d.getFullYear()+'/S'+((d.getMonth()>=8||d.getMonth()<=1)?1:2);}
 function uid(p){return p+'_'+Math.random().toString(36).slice(2,10);}
 function fmtKES(n){return 'Ksh '+Number(n).toLocaleString('en-KE');}
@@ -272,50 +204,13 @@ function fmtDT(s){var d=new Date(s);return d.toLocaleString('en-KE',{day:'2-digi
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
 function normPhone(p){var s=String(p).replace(/[^0-9]/g,'');if(s.indexOf('254')===0)return s;if(s.indexOf('0')===0)return'254'+s.slice(1);if(s.length===9)return'254'+s;return s;}
 function toLocalInput(iso){var d=new Date(iso),pad=function(n){return String(n).padStart(2,'0');};return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());}
-function datePill(s){var d=new Date(s);var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return '<div class="date-pill"><div class="d-month">'+months[d.getMonth()]+'</div><div class="d-day">'+String(d.getDate()).padStart(2,'0')+'</div></div>';}
-function initials(name){return String(name||'?').split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();}
+function datePill(s){var d=new Date(s);var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return '<div class="date-pill"><div class="d-month">'+m[d.getMonth()]+'</div><div class="d-day">'+String(d.getDate()).padStart(2,'0')+'</div></div>';}
+function initials(n){return String(n||'?').split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();}
 function catLabel(c){return CAT_LABELS[c]||c.replace(/_/g,' ');}
 var DB_KEY = 'bukaki_edit_v1';
-function seedDB(){
-  var families = [
-    {id:'f1',number:1,name:'St. Don Bosco',patron:'St. John Bosco'},
-    {id:'f2',number:2,name:'St. Michael',patron:'St. Michael the Archangel'},
-    {id:'f3',number:3,name:'St. Stephen',patron:'St. Stephen'},
-    {id:'f4',number:4,name:'St. Leo the Great',patron:'St. Leo the Great'},
-    {id:'f5',number:5,name:'St. Thomas of Aquinas',patron:'St. Thomas Aquinas'}
-  ];
-  return {
-    families: families,
-    members: [{
-      id:'admin', full_name: SUPER_ADMIN_NAME, reg_number:null,
-      phone: SUPER_ADMIN_PHONE, email:null, year_of_study:3, course:null,
-      diocese:'Bungoma', is_catholic:true, family_id:'f1',
-      role: SUPER_ADMIN_ROLE, status:'active',
-      joined_at:new Date().toISOString(), semester_joined:sem(),
-      membership_years:2, oath_accepted_at:null, is_super_admin:true,
-      password:null
-    }],
-    events:[], announcements:[], prayerIntentions:[], attendance:[], payments:[],
-    loans:[], elections:[], candidacies:[], votes:[], warnings:[], amendments:[],
-    currentUserId:null
-  };
-}
-function loadDB(){
-  try{
-    var raw = localStorage.getItem(DB_KEY);
-    if(!raw){var f=seedDB();localStorage.setItem(DB_KEY,JSON.stringify(f));return f;}
-    var db = JSON.parse(raw);
-    if(!db.announcements)db.announcements=[];
-    if(!db.prayerIntentions)db.prayerIntentions=[];
-    if(!db.attendance)db.attendance=[];
-    var idx=-1;
-    for(var i=0;i<db.members.length;i++){if(db.members[i].is_super_admin||db.members[i].phone===SUPER_ADMIN_PHONE){idx=i;break;}}
-    if(idx===-1)db.members.unshift(seedDB().members[0]);
-    else{db.members[idx].is_super_admin=true;db.members[idx].phone=SUPER_ADMIN_PHONE;}
-    return db;
-  }catch(e){return seedDB();}
-}
-function saveDB(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){} if(window.cloudSave) window.cloudSave(DB);}
+function seedDB(){var families=[{id:'f1',number:1,name:'St. Don Bosco',patron:'St. John Bosco'},{id:'f2',number:2,name:'St. Michael',patron:'St. Michael the Archangel'},{id:'f3',number:3,name:'St. Stephen',patron:'St. Stephen'},{id:'f4',number:4,name:'St. Leo the Great',patron:'St. Leo the Great'},{id:'f5',number:5,name:'St. Thomas of Aquinas',patron:'St. Thomas Aquinas'}];return {families:families,members:[{id:'admin',full_name:SUPER_ADMIN_NAME,reg_number:null,phone:SUPER_ADMIN_PHONE,email:null,year_of_study:3,course:null,diocese:'Bungoma',is_catholic:true,family_id:'f1',role:SUPER_ADMIN_ROLE,status:'active',joined_at:new Date().toISOString(),semester_joined:sem(),membership_years:2,oath_accepted_at:null,is_super_admin:true,password:null}],events:[],announcements:[],prayerIntentions:[],attendance:[],payments:[],loans:[],elections:[],candidacies:[],votes:[],warnings:[],amendments:[],currentUserId:null};}
+function loadDB(){try{var raw=localStorage.getItem(DB_KEY);if(!raw){var f=seedDB();localStorage.setItem(DB_KEY,JSON.stringify(f));return f;}var db=JSON.parse(raw);if(!db.announcements)db.announcements=[];if(!db.prayerIntentions)db.prayerIntentions=[];if(!db.attendance)db.attendance=[];var idx=-1;for(var i=0;i<db.members.length;i++){if(db.members[i].is_super_admin||db.members[i].phone===SUPER_ADMIN_PHONE){idx=i;break;}}if(idx===-1)db.members.unshift(seedDB().members[0]);else{db.members[idx].is_super_admin=true;db.members[idx].phone=SUPER_ADMIN_PHONE;}return db;}catch(e){return seedDB();}}
+async function saveDB(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){} if(window.cloudSave){var merged=await window.cloudSave(DB);if(merged){var wasUser=DB.currentUserId;DB=merged;DB.currentUserId=wasUser;try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){}}}}
 var DB = loadDB();
 function isSA(m){return !!(m && (m.is_super_admin || m.phone === SUPER_ADMIN_PHONE));}
 function isAdmin(m){return isSA(m) || (m && ADMIN_ROLES.indexOf(m.role)!==-1);}
@@ -323,900 +218,64 @@ function isFinance(m){return isSA(m) || (m && FINANCE_ROLES.indexOf(m.role)!==-1
 function me(){for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===DB.currentUserId)return DB.members[i];}return null;}
 function memberById(id){for(var i=0;i<DB.members.length;i++){if(DB.members[i].id===id)return DB.members[i];}return null;}
 function familyName(id){for(var i=0;i<DB.families.length;i++){if(DB.families[i].id===id)return DB.families[i].name;}return '';}
-function toast(msg,kind){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast show '+(kind||'success');
-  clearTimeout(t._tid);
-  t._tid=setTimeout(function(){t.className='toast';},2800);
-}
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-}
+function toast(msg,kind){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(kind||'success');clearTimeout(t._tid);t._tid=setTimeout(function(){t.className='toast';},2800);}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
 var ROUTE = (location.hash||'#dashboard').slice(1);
-var PAGE_TITLES = {
-  dashboard:'Dashboard', members:'Members', families:'Families', events:'Events',
-  announcements:'Announcements', prayer:'Prayer', attendance:'Attendance',
-  contributions:'Contributions', leadership:'Leadership', admin:'Administrator',
-  constitution:'Constitution', elections:'Elections', directory:'Directory',
-  register:'Join BUKAKI', login:'Sign in'
-};
+var PAGE_TITLES = {dashboard:'Dashboard',members:'Members',families:'Families',events:'Events',announcements:'Announcements',prayer:'Prayer',attendance:'Attendance',contributions:'Contributions',leadership:'Leadership',admin:'Administrator',constitution:'Constitution',elections:'Elections',directory:'Directory',register:'Join BUKAKI',login:'Sign in'};
 function go(r){location.hash=r;ROUTE=r;render();closeSidebar();window.scrollTo(0,0);}
 window.addEventListener('hashchange',function(){ROUTE=(location.hash||'#dashboard').slice(1);render();});
 var EDITING_MEMBER_ID = null;
-function startEditMember(id){ EDITING_MEMBER_ID = id; render(); }
-function cancelEditMember(){ EDITING_MEMBER_ID = null; render(); }
-function saveEditedMember(e){
-  e.preventDefault();
-  var id = EDITING_MEMBER_ID;
-  var m = memberById(id);
-  if(!m) return;
-  var newPhone = normPhone(document.getElementById('em_phone').value);
-  for(var i=0;i<DB.members.length;i++){
-    if(DB.members[i].id!==id && DB.members[i].phone===newPhone){
-      toast('Phone already used by another member.','error');
-      return;
-    }
-  }
-  m.full_name = document.getElementById('em_name').value.trim() || m.full_name;
-  m.phone = newPhone;
-  m.reg_number = document.getElementById('em_reg').value.trim() || null;
-  m.email = document.getElementById('em_email').value.trim() || null;
-  m.year_of_study = Number(document.getElementById('em_year').value);
-  m.course = document.getElementById('em_course').value.trim() || null;
-  m.diocese = document.getElementById('em_diocese').value;
-  m.family_id = document.getElementById('em_family').value;
-  m.is_catholic = document.getElementById('em_catholic').checked;
-  var newPass = document.getElementById('em_pass').value;
-  if(newPass && newPass.length >= 4) m.password = newPass;
-  if(isSA(m)){
-    m.is_super_admin = true;
-    m.phone = SUPER_ADMIN_PHONE;
-  } else {
-    m.role = document.getElementById('em_role').value;
-    m.status = document.getElementById('em_status').value;
-  }
-  saveDB();
-  toast(m.full_name + ' updated.');
-  EDITING_MEMBER_ID = null;
-  render();
-}
-function assignLeadership(role, memberId){
-  for(var i=0;i<DB.members.length;i++){
-    if(DB.members[i].role===role && DB.members[i].id!==memberId && !isSA(DB.members[i])){
-      DB.members[i].role = 'member';
-    }
-  }
-  if(memberId){
-    var nm = memberById(memberId);
-    if(nm && !isSA(nm)) nm.role = role;
-  }
-  saveDB();
-  toast(ROLES[role] + ' updated.');
-  render();
-}
-function doLogin(){
-  var phone = normPhone(document.getElementById('loginPhone').value);
-  var pass = document.getElementById('loginPass').value;
-  var found = null;
-  for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===phone){found=DB.members[i];break;}}
-  if(!found){toast('No member found with that phone. Please sign up.','error');return;}
-  if(!found.password){toast('No password set for this account. Contact admin.','error');return;}
-  if(found.password !== pass){toast('Wrong password.','error');return;}
-  DB.currentUserId = found.id;
-  saveDB();
-  toast(isSA(found)?'★ Karibu Super Admin':'Karibu '+found.full_name);
-  go('dashboard');
-}
-function logout(){ DB.currentUserId=null; saveDB(); toast('Signed out.'); go('dashboard'); }
-function affirmOath(){ var m=me(); if(!m) return; m.oath_accepted_at=new Date().toISOString(); saveDB(); toast('Oath affirmed.'); render(); }
-function createEvent(e){
-  e.preventDefault();
-  var title = document.getElementById('evTitle').value.trim();
-  var cat = document.getElementById('evCat').value;
-  var dt = document.getElementById('evTime').value;
-  var loc = document.getElementById('evLoc').value.trim();
-  var desc = document.getElementById('evDesc').value.trim();
-  if(!title||!dt){toast('Title and time required.','error');return;}
-  DB.events.push({id:uid('e'),title:title,description:desc||null,category:cat,starts_at:new Date(dt).toISOString(),location:loc||null,semester:sem(),created_by:DB.currentUserId});
-  saveDB(); toast('Event published.'); render();
-}
-function deleteEvent(id){
-  if(!confirm('Delete this event?')) return;
-  DB.events = DB.events.filter(function(x){return x.id!==id;});
-  saveDB(); toast('Event deleted.'); render();
-}
-function createAnnouncement(e){
-  e.preventDefault();
-  var title = document.getElementById('anTitle').value.trim();
-  var body = document.getElementById('anBody').value.trim();
-  var pinned = document.getElementById('anPinned').checked;
-  if(!title||!body){toast('Title and body required.','error');return;}
-  DB.announcements.unshift({id:uid('a'),title:title,body:body,pinned:pinned,created_at:new Date().toISOString(),created_by:DB.currentUserId});
-  saveDB(); toast('Announcement published.'); render();
-}
-function deleteAnnouncement(id){
-  if(!confirm('Delete this announcement?')) return;
-  DB.announcements = DB.announcements.filter(function(x){return x.id!==id;});
-  saveDB(); toast('Deleted.'); render();
-}
-function addMember(e){
-  e.preventDefault();
-  var f = {
-    id:uid('m'),
-    full_name:document.getElementById('mName').value.trim(),
-    phone:normPhone(document.getElementById('mPhone').value),
-    reg_number:document.getElementById('mReg').value.trim()||null,
-    email:document.getElementById('mEmail').value.trim()||null,
-    year_of_study:Number(document.getElementById('mYear').value),
-    course:document.getElementById('mCourse').value.trim()||null,
-    diocese:document.getElementById('mDiocese').value,
-    is_catholic:document.getElementById('mCatholic').checked,
-    family_id:document.getElementById('mFamily').value,
-    role:document.getElementById('mRole').value,
-    status:'active',
-    joined_at:new Date().toISOString(),
-    semester_joined:sem(),
-    membership_years:0,
-    oath_accepted_at:null,
-    is_super_admin:false,
-    password: document.getElementById('mPass').value || null
-  };
-  if(!f.full_name||!f.phone){toast('Name and phone required.','error');return;}
-  for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone already in use.','error');return;}}
-  DB.members.push(f);
-  saveDB(); toast(f.full_name+' added.'); render();
-}
-function deleteMember(id){
-  var m = memberById(id);
-  if(!m) return;
-  if(isSA(m)){toast('Cannot delete Super Admin.','error');return;}
-  if(!confirm('Delete '+m.full_name+'?')) return;
-  DB.members = DB.members.filter(function(x){return x.id!==id;});
-  saveDB(); toast('Deleted.'); render();
-}
-function submitPrayer(e){
-  e.preventDefault();
-  var m = me(); if(!m) return;
-  var text = document.getElementById('prText').value.trim();
-  if(!text){toast('Type an intention.','error');return;}
-  DB.prayerIntentions.unshift({id:uid('pr'),text:text,member_id:m.id,created_at:new Date().toISOString(),pray_count:0});
-  saveDB(); toast('Prayer intention submitted.'); render();
-}
-function prayFor(id){
-  for(var i=0;i<DB.prayerIntentions.length;i++){
-    if(DB.prayerIntentions[i].id===id){DB.prayerIntentions[i].pray_count++;break;}
-  }
-  saveDB(); toast('🙏 Praying with you.'); render();
-}
-function deletePrayer(id){
-  if(!confirm('Delete this intention?')) return;
-  DB.prayerIntentions = DB.prayerIntentions.filter(function(x){return x.id!==id;});
-  saveDB(); render();
-}
-function toggleAttendance(eventId, memberId){
-  var found = false;
-  for(var i=0;i<DB.attendance.length;i++){
-    if(DB.attendance[i].event_id===eventId && DB.attendance[i].member_id===memberId){
-      DB.attendance[i].present = !DB.attendance[i].present;
-      found = true; break;
-    }
-  }
-  if(!found) DB.attendance.push({id:uid('at'),event_id:eventId,member_id:memberId,present:true,marked_at:new Date().toISOString()});
-  saveDB(); render();
-}
-function switchAdminTab(t){window._adminTab=t; render();}
-function resetEverything(){
-  if(!isSA(me())) return;
-  if(!confirm('Reset EVERYTHING to factory state?')) return;
-  if(!confirm('Really sure? Last chance.')) return;
-  localStorage.removeItem(DB_KEY); location.reload();
-}
-function copyBackup(){
-  var json = JSON.stringify(DB,null,2);
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(json).then(function(){toast('Copied.');},function(){prompt('Copy:',json);});
-  } else {prompt('Copy:',json);}
-}
-function castVote(elId,candId){
-  var u = me(); if(!u) return;
-  for(var i=0;i<DB.votes.length;i++){if(DB.votes[i].election_id===elId && DB.votes[i].voter_id===u.id){toast('Already voted.','error');return;}}
-  DB.votes.push({id:uid('v'),election_id:elId,voter_id:u.id,candidate_id:candId,cast_at:new Date().toISOString()});
-  for(var j=0;j<DB.candidacies.length;j++){
-    if(DB.candidacies[j].election_id===elId && DB.candidacies[j].member_id===candId){DB.candidacies[j].votes++;}
-  }
-  saveDB(); toast('Vote recorded.'); render();
-}
-function renderSidebar(){
-  var u = me();
-  var menu = [
-    ['dashboard','Dashboard','dashboard'],['members','Members','members'],
-    ['families','Families','families'],['events','Events','events'],
-    ['announcements','Announcements','announcements'],['prayer','Prayer','prayer'],
-    ['attendance','Attendance','attendance'],['contributions','Contributions','contributions'],
-    ['leadership','Leadership','leadership'],['directory','Directory','directory'],
-    ['constitution','Constitution','constitution'],['elections','Elections','elections']
-  ];
-  if(isAdmin(u)) menu.push(['admin','Administrator','admin']);
-  var html = '';
-  for(var i=0;i<menu.length;i++){
-    var r=menu[i][0], label=menu[i][1], ic=menu[i][2];
-    html += '<button class="sb-item '+(ROUTE===r?'active':'')+'" onclick="go(\''+r+'\')">'+icon(ic)+'<span>'+label+'</span></button>';
-  }
-  document.getElementById('sidebarMenu').innerHTML = html;
-}
-function viewDashboard(){
-  var u = me();
-  var upcoming = DB.events.filter(function(e){return new Date(e.starts_at)>=new Date();}).sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at);});
-  var activeCount = DB.members.filter(function(m){return m.status==='active'||m.status==='reinstated';}).length;
-  var annCount = DB.announcements.length, prayerCount = DB.prayerIntentions.length;
-  if(!u){
-    var h = '<div class="hero"><div class="hero-label">Welcome to BUKAKI</div>';
-    h += '<h1>Growing together in faith and service.</h1>';
-    h += '<p>A digital home for University of Eldoret Catholic comrades to connect, pray, serve and lead.</p>';
-    h += '<div class="hero-actions"><button class="hero-btn solid" onclick="go(\'register\')">Join BUKAKI</button>';
-    h += '<button class="hero-btn" onclick="go(\'events\')">'+icon('events')+' View events</button>';
-    h += '<button class="hero-btn" onclick="go(\'login\')">Sign in</button></div></div>';
-    h += '<div class="stats-grid">';
-    h += '<div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+activeCount+'</div></div>';
-    h += '<div class="stat-card"><div class="stat-label">Upcoming events</div><div class="stat-value">'+upcoming.length+'</div></div>';
-    h += '<div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+annCount+'</div></div>';
-    h += '<div class="stat-card"><div class="stat-label">Prayer intentions</div><div class="stat-value">'+prayerCount+'</div></div>';
-    h += '</div>';
-    h += '<div class="card"><div class="card-h"><h2>Next events</h2><a onclick="go(\'events\')">View all '+icon('arrow')+'</a></div>';
-    var next3 = upcoming.slice(0,3);
-    if(next3.length===0) h += '<p class="muted">No events yet.</p>';
-    for(var i=0;i<next3.length;i++){
-      var e = next3[i];
-      h += '<div class="event-row">'+datePill(e.starts_at)+'<div class="event-info"><h3>'+esc(e.title)+'</h3><p>'+(e.location?esc(e.location):'')+'</p></div></div>';
-    }
-    h += '</div>';
-    return h;
-  }
-  var h2 = '<div class="hero"><div class="hero-label">Welcome to BUKAKI</div>';
-  h2 += '<h1>Growing together in faith and service.</h1>';
-  h2 += '<p>A digital home for University of Eldoret Catholic comrades to connect, pray, serve and lead.</p>';
-  h2 += '<div class="hero-actions">';
-  h2 += '<button class="hero-btn solid" onclick="go(\'events\')">'+icon('events')+' View events</button>';
-  h2 += '<button class="hero-btn" onclick="go(\'prayer\')">'+icon('prayer')+' Prayer intentions</button>';
-  if(isAdmin(u)) h2 += '<button class="hero-btn" onclick="go(\'admin\')">'+icon('admin')+' Admin dashboard</button>';
-  h2 += '</div></div>';
-  h2 += '<div class="stats-grid">';
-  h2 += '<div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+activeCount+'</div></div>';
-  h2 += '<div class="stat-card"><div class="stat-label">Upcoming events</div><div class="stat-value">'+upcoming.length+'</div></div>';
-  h2 += '<div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+annCount+'</div></div>';
-  h2 += '<div class="stat-card"><div class="stat-label">Prayer intentions</div><div class="stat-value">'+prayerCount+'</div></div>';
-  h2 += '</div>';
-  h2 += '<div class="card"><div class="card-h"><h2>Next events</h2><a onclick="go(\'events\')">View all '+icon('arrow')+'</a></div>';
-  var next = upcoming.slice(0,3);
-  if(next.length===0) h2 += '<p class="muted">No events scheduled yet.</p>';
-  for(var k=0;k<next.length;k++){
-    var e2 = next[k];
-    var timeOnly = new Date(e2.starts_at).toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
-    h2 += '<div class="event-row">'+datePill(e2.starts_at)+'<div class="event-info"><h3>'+esc(e2.title)+'</h3><p>'+timeOnly+(e2.location?' · '+esc(e2.location):'')+'</p></div></div>';
-  }
-  h2 += '</div>';
-  h2 += '<div class="card"><div class="card-h"><h2>Latest announcements</h2><a onclick="go(\'announcements\')">View all '+icon('arrow')+'</a></div>';
-  var anns2 = DB.announcements.slice(0,2);
-  if(anns2.length===0) h2 += '<p class="muted">No announcements yet.</p>';
-  for(var l=0;l<anns2.length;l++){
-    var a2 = anns2[l];
-    h2 += '<div class="ann-item"><div class="ann-h"><h3>'+esc(a2.title)+'</h3>'+(a2.pinned?'<span class="chip pinned">Pinned</span>':'')+'</div><p>'+esc(a2.body)+'</p></div>';
-  }
-  h2 += '</div>';
-  return h2;
-}
-function viewMembers(){
-  var u = me();
-  var canEdit = isAdmin(u);
-  var h = '<div class="card"><div class="card-h"><h2>All members ('+DB.members.length+')</h2>';
-  if(canEdit) h += '<span class="chip">Admin: tap Edit to change</span>';
-  h += '</div>';
-  for(var i=0;i<DB.members.length;i++){
-    var m = DB.members[i];
-    var sa = isSA(m);
-    var editing = EDITING_MEMBER_ID === m.id;
-    if(editing){
-      h += '<div class="edit-form">';
-      h += '<h3 style="font-size:15px;font-weight:700;margin-bottom:12px">Editing: '+esc(m.full_name)+'</h3>';
-      h += '<form onsubmit="saveEditedMember(event)">';
-      h += '<div class="grid2">';
-      h += '<label class="field"><span>Full name</span><input id="em_name" value="'+esc(m.full_name)+'" required></label>';
-      h += '<label class="field"><span>Phone</span><input id="em_phone" value="'+esc(m.phone)+'" required></label>';
-      h += '<label class="field"><span>Reg. number</span><input id="em_reg" value="'+esc(m.reg_number||'')+'"></label>';
-      h += '<label class="field"><span>Email</span><input id="em_email" value="'+esc(m.email||'')+'" type="email"></label>';
-      h += '<label class="field"><span>Year</span><select id="em_year">';
-      for(var y=1;y<=6;y++) h += '<option value="'+y+'"'+(m.year_of_study===y?' selected':'')+'>Year '+y+'</option>';
-      h += '</select></label>';
-      h += '<label class="field"><span>Course</span><input id="em_course" value="'+esc(m.course||'')+'"></label>';
-      h += '<label class="field"><span>Diocese</span><select id="em_diocese">';
-      var dios = ['Bungoma','Kakamega','Kitale','Other'];
-      for(var d=0;d<dios.length;d++) h += '<option'+(m.diocese===dios[d]?' selected':'')+'>'+dios[d]+'</option>';
-      h += '</select></label>';
-      h += '<label class="field"><span>Family</span><select id="em_family">';
-      for(var fi=0;fi<DB.families.length;fi++) h += '<option value="'+DB.families[fi].id+'"'+(m.family_id===DB.families[fi].id?' selected':'')+'>'+esc(DB.families[fi].name)+'</option>';
-      h += '</select></label>';
-      if(!sa){
-        h += '<label class="field"><span>Role</span><select id="em_role">';
-        for(var rk in ROLES) h += '<option value="'+rk+'"'+(m.role===rk?' selected':'')+'>'+ROLES[rk]+'</option>';
-        h += '</select></label>';
-        h += '<label class="field"><span>Status</span><select id="em_status">';
-        var statuses = ['active','pending','warned','revoked','reinstated'];
-        for(var si=0;si<statuses.length;si++) h += '<option value="'+statuses[si]+'"'+(m.status===statuses[si]?' selected':'')+'>'+statuses[si]+'</option>';
-        h += '</select></label>';
-      }
-      h += '<label class="field"><span>New Password (blank = keep)</span><input id="em_pass" type="text" placeholder="Leave blank to keep current"></label>';
-      h += '</div>';
-      h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';
-      if(sa) h += '<p class="muted small mb">★ Super Admin phone and privileges are locked.</p>';
-      h += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
-      h += '<button type="submit" class="btn btn-success">'+icon('check')+' Save changes</button>';
-      h += '<button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button>';
-      h += '</div></form></div>';
-    } else {
-      var phoneDisplay = canEdit ? esc(m.phone) : '••••••••';
-      h += '<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'">';
-      h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
-      h += '<div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3>';
-      h += '<p>'+(ROLES[m.role]||m.role)+' · '+phoneDisplay+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
-      h += '<span class="badge '+m.status+'">'+m.status+'</span>';
-      if(canEdit){
-        h += '<div class="member-actions">';
-        h += '<button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';
-        if(!sa) h += '<button class="btn btn-danger btn-sm" onclick="deleteMember(\''+m.id+'\')">'+icon('trash')+'</button>';
-        h += '</div>';
-      }
-      h += '</div>';
-    }
-  }
-  h += '</div>';
-  return h;
-}
-function viewFamilies(){
-  var h = '';
-  for(var i=0;i<DB.families.length;i++){
-    var f = DB.families[i];
-    var members = DB.members.filter(function(m){return m.family_id===f.id && (m.status==='active'||m.status==='reinstated');});
-    var dad=null, mum=null;
-    for(var j=0;j<members.length;j++){
-      if(members[j].role==='family_head_dad')dad=members[j];
-      if(members[j].role==='family_head_mum')mum=members[j];
-    }
-    h += '<div class="card"><div class="card-h"><h2>'+esc(f.name)+'</h2><span class="chip">Family '+f.number+'</span></div>';
-    h += '<p class="muted mb">Patron: '+esc(f.patron)+' · '+members.length+' members</p>';
-    if(dad||mum) h += '<p class="small"><b>Dad:</b> '+(dad?esc(dad.full_name):'Vacant')+' · <b>Mum:</b> '+(mum?esc(mum.full_name):'Vacant')+'</p>';
-    h += '</div>';
-  }
-  return h;
-}
-function viewEvents(){
-  var upcoming = DB.events.filter(function(e){return new Date(e.starts_at)>=new Date();}).sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at);});
-  var past = DB.events.filter(function(e){return new Date(e.starts_at)<new Date();}).sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);});
-  var h = '<div class="card"><div class="card-h"><h2>Upcoming BUKAKI events</h2></div>';
-  if(upcoming.length===0) h += '<p class="muted">No upcoming events.</p>';
-  for(var i=0;i<upcoming.length;i++){
-    var e = upcoming[i];
-    var dateFull = new Date(e.starts_at).toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    var timeOnly = new Date(e.starts_at).toLocaleTimeString('en-KE',{hour:'numeric',minute:'2-digit'});
-    h += '<div style="border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px">';
-    h += '<span class="chip">'+esc(catLabel(e.category))+'</span>';
-    h += '<h3 style="font-size:17px;font-weight:600;margin:10px 0 6px">'+esc(e.title)+'</h3>';
-    if(e.description) h += '<p class="muted" style="margin-bottom:10px">'+esc(e.description)+'</p>';
-    h += '<p style="font-size:14px;font-weight:600;margin-bottom:4px">'+dateFull+'</p>';
-    h += '<p class="muted">'+timeOnly+(e.location?' · '+esc(e.location):'')+'</p></div>';
-  }
-  h += '</div>';
-  if(past.length>0){
-    h += '<div class="card"><div class="card-h"><h2>Past events</h2></div>';
-    for(var j=0;j<past.length;j++) h += '<div class="member-row"><div class="member-info"><h3>'+esc(past[j].title)+'</h3><p>'+fmtDate(past[j].starts_at)+'</p></div></div>';
-    h += '</div>';
-  }
-  return h;
-}
-function viewAnnouncements(){
-  var h = '<div class="card"><div class="card-h"><h2>Community announcements</h2></div>';
-  if(DB.announcements.length===0) h += '<p class="muted">No announcements yet.</p>';
-  var sorted = DB.announcements.slice().sort(function(a,b){
-    if(a.pinned && !b.pinned) return -1;
-    if(!a.pinned && b.pinned) return 1;
-    return new Date(b.created_at)-new Date(a.created_at);
-  });
-  for(var i=0;i<sorted.length;i++){
-    var a = sorted[i];
-    h += '<div class="ann-item"><div class="ann-h"><h3>'+esc(a.title)+'</h3>'+(a.pinned?'<span class="chip pinned">Pinned</span>':'')+'</div>';
-    h += '<p>'+esc(a.body)+'</p><p class="small" style="margin-top:8px">'+fmtDate(a.created_at)+'</p>';
-    if(isAdmin(me())) h += '<button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteAnnouncement(\''+a.id+'\')">'+icon('trash')+' Delete</button>';
-    h += '</div>';
-  }
-  h += '</div>';
-  return h;
-}
-function viewPrayer(){
-  var u = me();
-  var h = '';
-  if(u){
-    h += '<div class="card"><div class="card-h"><h2>Submit a prayer intention</h2></div>';
-    h += '<form onsubmit="submitPrayer(event)"><label class="field"><span>Your intention</span><textarea id="prText" placeholder="Share what is on your heart..." required></textarea></label>';
-    h += '<button type="submit" class="btn btn-primary btn-block">Submit intention</button></form></div>';
-  }
-  h += '<div class="card"><div class="card-h"><h2>Community prayer wall ('+DB.prayerIntentions.length+')</h2></div>';
-  if(DB.prayerIntentions.length===0) h += '<p class="muted">No intentions yet.</p>';
-  for(var i=0;i<DB.prayerIntentions.length;i++){
-    var p = DB.prayerIntentions[i];
-    var author = memberById(p.member_id);
-    h += '<div class="prayer-item"><h3>'+esc(author?author.full_name:'Anonymous')+'</h3>';
-    h += '<p>'+esc(p.text)+'</p>';
-    h += '<div class="prayer-meta"><span>'+fmtDate(p.created_at)+'</span><span>';
-    h += '<button class="btn btn-outline btn-sm" onclick="prayFor(\''+p.id+'\')">🙏 Pray ('+p.pray_count+')</button>';
-    if(isAdmin(u)) h += ' <button class="btn btn-danger btn-sm" onclick="deletePrayer(\''+p.id+'\')">'+icon('trash')+'</button>';
-    h += '</span></div></div>';
-  }
-  h += '</div>';
-  return h;
-}
-function viewAttendance(){
-  var u = me();
-  if(!isAdmin(u)) return '<div class="card"><h2>Access denied</h2><p class="muted">Only administrators can mark attendance.</p></div>';
-  var h = '';
-  var past = DB.events.slice().sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);}).slice(0,5);
-  if(past.length===0) return '<div class="card"><p class="muted">No events to mark attendance for.</p></div>';
-  for(var i=0;i<past.length;i++){
-    var e = past[i];
-    h += '<div class="card"><div class="card-h"><h2>'+esc(e.title)+'</h2><span class="chip">'+fmtDate(e.starts_at)+'</span></div>';
-    for(var j=0;j<DB.members.length;j++){
-      var m = DB.members[j];
-      var at = null;
-      for(var k=0;k<DB.attendance.length;k++){
-        if(DB.attendance[k].event_id===e.id && DB.attendance[k].member_id===m.id){at=DB.attendance[k];break;}
-      }
-      var isPresent = at && at.present;
-      h += '<div class="member-row" style="cursor:pointer" onclick="toggleAttendance(\''+e.id+'\',\''+m.id+'\')">';
-      h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
-      h += '<div class="member-info"><h3>'+esc(m.full_name)+'</h3><p>'+(ROLES[m.role]||m.role)+'</p></div>';
-      h += '<span class="badge '+(isPresent?'active':'')+'">'+(isPresent?'Present':'Absent')+'</span></div>';
-    }
-    h += '</div>';
-  }
-  return h;
-}
-function viewContributions(){
-  var u = me();
-  var canSeeAll = isFinance(u);
-  var myPayments = canSeeAll ? DB.payments.slice().sort(function(a,b){return new Date(b.paid_at)-new Date(a.paid_at);}) : DB.payments.filter(function(p){return p.member_id===DB.currentUserId;});
-  var total = myPayments.reduce(function(s,p){return s+Number(p.amount);},0);
-  var h = '<div class="card"><div class="card-h"><h2>'+(canSeeAll?'All contributions':'My contributions')+'</h2></div>';
-  h += '<p class="muted mb">Total: <b style="color:var(--burgundy)">'+fmtKES(total)+'</b></p>';
-  if(myPayments.length===0) h += '<p class="muted">No payments recorded.</p>';
-  for(var i=0;i<myPayments.length;i++){
-    var p = myPayments[i];
-    var m = memberById(p.member_id);
-    h += '<div class="member-row"><div class="member-info"><h3>'+(canSeeAll?esc(m?m.full_name:'-')+' · ':'')+esc(p.type.replace(/_/g,' '))+'</h3>';
-    h += '<p>'+fmtDate(p.paid_at)+' · '+esc(p.semester)+'</p></div>';
-    h += '<span style="font-weight:600;color:var(--burgundy)">'+fmtKES(p.amount)+'</span></div>';
-  }
-  h += '</div>';
-  return h;
-}
-function viewLeadership(){
-  var h = '<div class="card"><div class="card-h"><h2>BUKAKI leadership</h2></div>';
-  for(var i=0;i<LEADERSHIP_POSITIONS.length;i++){
-    var pos = LEADERSHIP_POSITIONS[i];
-    var holder = null;
-    for(var j=0;j<DB.members.length;j++){
-      if(DB.members[j].role===pos.role && (DB.members[j].status==='active'||DB.members[j].status==='reinstated')){holder=DB.members[j];break;}
-    }
-    h += '<div class="leader-row"><div class="leader-avatar">'+icon('leadership')+'</div>';
-    h += '<div class="leader-info"><h3>'+ROLES[pos.role]+'</h3>';
-    h += '<p>'+(holder?esc(holder.full_name):(pos.desc||'Vacant'))+'</p></div></div>';
-  }
-  h += '</div>';
-  var u = me();
-  if(u){
-    h += '<div class="access-card"><div class="check">'+icon('check')+'</div>';
-    h += '<div><h3>'+(isSA(u)?'Super Admin access active':(isAdmin(u)?'Administrator access active':'Member access'))+'</h3>';
-    h += '<p>'+(isSA(u)?'Member · Leader · Super Administrator':(isAdmin(u)?'Member · Leader · Administrator':'Member'))+'</p>';
-    h += '<p class="small">Signed in as '+esc(u.full_name)+' · '+(ROLES[u.role]||u.role)+'</p></div></div>';
-  }
-  return h;
-}
-function viewConstitution(){
-  var h = '<div class="card"><div class="card-h"><h2>Constitution of St. Peter\'s BUKAKI</h2></div><p class="muted">Adopted November 2024 · UoECSA St. Gabriel Chaplaincy</p></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Motto</h2><p style="font-style:italic;color:var(--burgundy)">"In Unity We Serve"</p></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Vision</h2><p>To create, promote a united and ethical society.</p></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Mission</h2><p>To cultivate a vibrant community of faith, knowledge, and service among Catholic university students; empowering them to live their beliefs, support one another spiritually and academically, and positively impact society through acts of brotherhood and sisterhood.</p></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Objectives</h2><ul style="list-style:none">';
-  for(var i=0;i<OBJECTIVES.length;i++) h += '<li style="padding:6px 0;font-size:14px">· '+esc(OBJECTIVES[i])+'</li>';
-  h += '</ul></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Foundational Values</h2><div style="display:flex;flex-wrap:wrap;gap:6px">';
-  for(var j=0;j<VALUES.length;j++) h += '<span class="family-chip">'+esc(VALUES[j])+'</span>';
-  h += '</div></div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Version history</h2>';
-  for(var k=0;k<VERSIONS.length;k++){
-    var v = VERSIONS[k];
-    h += '<div style="padding:12px 0;border-bottom:1px solid var(--border)"><div class="row-between"><b style="color:var(--burgundy)">Version '+v.v+'</b><span class="small">'+fmtDate(v.d)+'</span></div><p class="muted" style="margin-top:6px">'+esc(v.s)+'</p></div>';
-  }
-  h += '</div>';
-  h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Section 6.2 · Dissolution</h2><p>As a religious organization, this movement shall remain operational as long as the University of Eldoret exists. Therefore, the constitution cannot be dissolved or replaced.</p></div>';
-  return h;
-}
-function viewElections(){
-  var h = '<div class="card"><div class="card-h"><h2>Elections (Art. 5)</h2></div><p class="muted">Free, fair, transparent.</p></div>';
-  if(DB.elections.length===0){h += '<div class="card"><p class="muted">No elections scheduled.</p></div>';return h;}
-  for(var i=0;i<DB.elections.length;i++){
-    var el = DB.elections[i];
-    var cands = DB.candidacies.filter(function(c){return c.election_id===el.id;});
-    h += '<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:6px">'+(ROLES[el.position]||el.position)+'</h2>';
-    h += '<p class="small mb">'+fmtDT(el.opens_at)+' → '+fmtDT(el.closes_at)+'</p>';
-    for(var j=0;j<cands.length;j++){
-      var c = cands[j];
-      var m = memberById(c.member_id);
-      h += '<div class="member-row"><div class="member-info"><h3>'+esc(m?m.full_name:'-')+'</h3><p>'+c.votes+' votes</p></div>';
-      if(el.status==='open') h += '<button class="btn btn-primary btn-sm" onclick="castVote(\''+el.id+'\',\''+c.member_id+'\')">Vote</button>';
-      h += '</div>';
-    }
-    h += '</div>';
-  }
-  return h;
-}
-function viewDirectory(){
-  var active = DB.members.filter(function(m){return m.status==='active'||m.status==='reinstated';});
-  function section(title, list){
-    var hh = '<div class="card"><div class="card-h"><h2>'+title+' ('+list.length+')</h2></div>';
-    if(list.length===0) hh += '<p class="muted">No records.</p>';
-    for(var i=0;i<list.length;i++){
-      var m = list[i];
-      hh += '<div class="member-row"><div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
-      hh += '<div class="member-info"><h3>'+esc(m.full_name)+(isSA(m)?' <span class="badge super">★ Super</span>':'')+'</h3>';
-      hh += '<p>'+(ROLES[m.role]||m.role)+(m.year_of_study?' · Year '+m.year_of_study:'')+'</p></div></div>';
-    }
-    hh += '</div>';
-    return hh;
-  }
-  var exec = active.filter(function(m){return EXEC_ROLES.indexOf(m.role)!==-1 || isSA(m);});
-  var heads = active.filter(function(m){return m.role.indexOf('family_head')===0;});
-  var rest = active.filter(function(m){return EXEC_ROLES.indexOf(m.role)===-1 && m.role.indexOf('family_head')!==0 && !isSA(m);});
-  return section('Executive Committee',exec)+section('Family Heads',heads)+section('Members',rest);
-}
-function viewAdmin(){
-  var u = me();
-  if(!isAdmin(u)) return '<div class="card"><h2 style="font-size:16px;font-weight:600">Access denied</h2><p class="muted">Only authorized administrators can access this page.</p></div>';
-  var tab = window._adminTab || 'members';
-  var h = '';
-  h += '<div class="hero" style="margin-bottom:20px"><div class="hero-label">Administrator Console</div>';
-  h += '<h1>BUKAKI Administration</h1>';
-  h += '<p>Manage the University of Eldoret Catholic Comrades community from one protected workspace.</p></div>';
-  h += '<div class="stats-grid">';
-  h += '<div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+DB.members.length+'</div></div>';
-  h += '<div class="stat-card"><div class="stat-label">Events</div><div class="stat-value">'+DB.events.length+'</div></div>';
-  h += '<div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+DB.announcements.length+'</div></div>';
-  h += '<div class="stat-card"><div class="stat-label">Your roles</div><div class="stat-value" style="font-size:14px;line-height:1.3">'+(isSA(u)?'Super Admin':'Admin')+' · '+(ROLES[u.role]||u.role)+'</div></div>';
-  h += '</div>';
-  var tabs = [
-    ['members','Members'],['leadership','Leadership'],
-    ['create','Create'],['manage','Manage'],['data','Data']
-  ];
-  h += '<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:16px">';
-  for(var i=0;i<tabs.length;i++){
-    h += '<button class="btn btn-sm '+(tab===tabs[i][0]?'btn-primary':'btn-outline')+'" onclick="switchAdminTab(\''+tabs[i][0]+'\')">'+tabs[i][1]+'</button>';
-  }
-  h += '</div>';
-  if(tab==='members'){
-    h += '<div class="card"><div class="card-h"><h2>All members ('+DB.members.length+')</h2><span class="chip">Tap Edit to modify</span></div>';
-    for(var mi=0;mi<DB.members.length;mi++){
-      var m = DB.members[mi];
-      var sa = isSA(m);
-      var editing = EDITING_MEMBER_ID === m.id;
-      if(editing){
-        h += '<div class="edit-form">';
-        h += '<h3 style="font-size:15px;font-weight:700;margin-bottom:12px">Editing: '+esc(m.full_name)+'</h3>';
-        h += '<form onsubmit="saveEditedMember(event)">';
-        h += '<div class="grid2">';
-        h += '<label class="field"><span>Full name</span><input id="em_name" value="'+esc(m.full_name)+'" required></label>';
-        h += '<label class="field"><span>Phone</span><input id="em_phone" value="'+esc(m.phone)+'" required></label>';
-        h += '<label class="field"><span>Reg. number</span><input id="em_reg" value="'+esc(m.reg_number||'')+'"></label>';
-        h += '<label class="field"><span>Email</span><input id="em_email" value="'+esc(m.email||'')+'" type="email"></label>';
-        h += '<label class="field"><span>Year</span><select id="em_year">';
-        for(var y=1;y<=6;y++) h += '<option value="'+y+'"'+(m.year_of_study===y?' selected':'')+'>Year '+y+'</option>';
-        h += '</select></label>';
-        h += '<label class="field"><span>Course</span><input id="em_course" value="'+esc(m.course||'')+'"></label>';
-        h += '<label class="field"><span>Diocese</span><select id="em_diocese">';
-        var dios = ['Bungoma','Kakamega','Kitale','Other'];
-        for(var d=0;d<dios.length;d++) h += '<option'+(m.diocese===dios[d]?' selected':'')+'>'+dios[d]+'</option>';
-        h += '</select></label>';
-        h += '<label class="field"><span>Family</span><select id="em_family">';
-        for(var fi=0;fi<DB.families.length;fi++) h += '<option value="'+DB.families[fi].id+'"'+(m.family_id===DB.families[fi].id?' selected':'')+'>'+esc(DB.families[fi].name)+'</option>';
-        h += '</select></label>';
-        if(!sa){
-          h += '<label class="field"><span>Role</span><select id="em_role">';
-          for(var rk in ROLES) h += '<option value="'+rk+'"'+(m.role===rk?' selected':'')+'>'+ROLES[rk]+'</option>';
-          h += '</select></label>';
-          h += '<label class="field"><span>Status</span><select id="em_status">';
-          var statuses = ['active','pending','warned','revoked','reinstated'];
-          for(var si=0;si<statuses.length;si++) h += '<option value="'+statuses[si]+'"'+(m.status===statuses[si]?' selected':'')+'>'+statuses[si]+'</option>';
-          h += '</select></label>';
-        }
-        h += '<label class="field"><span>New Password (blank = keep)</span><input id="em_pass" type="text" placeholder="Leave blank to keep current"></label>';
-        h += '</div>';
-        h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';
-        if(sa) h += '<p class="muted small mb">★ Super Admin phone and privileges are locked.</p>';
-        h += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
-        h += '<button type="submit" class="btn btn-success">'+icon('check')+' Save changes</button>';
-        h += '<button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button>';
-        h += '</div></form></div>';
-      } else {
-        h += '<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'">';
-        h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
-        h += '<div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3>';
-        h += '<p>'+(ROLES[m.role]||m.role)+' · '+esc(m.phone)+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
-        h += '<span class="badge '+m.status+'">'+m.status+'</span>';
-        h += '<div class="member-actions">';
-        h += '<button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';
-        if(!sa) h += '<button class="btn btn-danger btn-sm" onclick="deleteMember(\''+m.id+'\')">'+icon('trash')+'</button>';
-        h += '</div></div>';
-      }
-    }
-    h += '</div>';
-  }
-  if(tab==='leadership'){
-    h += '<div class="card"><div class="card-h"><h2>Assign leadership positions</h2></div>';
-    h += '<p class="muted mb">Pick a member from the dropdown to assign them to a position. The previous holder is automatically demoted to Member. Changes save instantly.</p>';
-    for(var li=0;li<LEADERSHIP_POSITIONS.length;li++){
-      var pos = LEADERSHIP_POSITIONS[li];
-      var holder = null;
-      for(var hj=0;hj<DB.members.length;hj++){
-        if(DB.members[hj].role===pos.role && !isSA(DB.members[hj])){holder=DB.members[hj];break;}
-      }
-      var saHolder = null;
-      for(var sk=0;sk<DB.members.length;sk++){
-        if(DB.members[sk].role===pos.role && isSA(DB.members[sk])){saHolder=DB.members[sk];break;}
-      }
-      h += '<div class="assign-row">';
-      h += '<div><div class="assign-label">'+ROLES[pos.role]+'</div><div class="assign-sub">'+pos.desc+'</div>';
-      if(saHolder) h += '<div class="assign-sub" style="color:var(--burgundy);font-weight:600">Current: '+esc(saHolder.full_name)+' (Super Admin, locked)</div>';
-      else if(holder) h += '<div class="assign-sub" style="color:var(--burgundy);font-weight:600">Current: '+esc(holder.full_name)+'</div>';
-      else h += '<div class="assign-sub">Currently vacant</div>';
-      h += '</div>';
-      h += '<select class="role-select" onchange="assignLeadership(\''+pos.role+'\', this.value)">';
-      h += '<option value="">— Vacant —</option>';
-      for(var mi2=0;mi2<DB.members.length;mi2++){
-        var mem = DB.members[mi2];
-        if(isSA(mem)) continue;
-        if(mem.status!=='active' && mem.status!=='reinstated') continue;
-        h += '<option value="'+mem.id+'"'+(holder && holder.id===mem.id?' selected':'')+'>'+esc(mem.full_name)+' ('+esc(mem.phone)+')</option>';
-      }
-      h += '</select></div>';
-    }
-    h += '</div>';
-  }
-  if(tab==='create'){
-    h += '<div class="card"><div class="card-h"><h2>Create event</h2></div>';
-    h += '<form onsubmit="createEvent(event)">';
-    h += '<label class="field"><span>Event title</span><input id="evTitle" required></label>';
-    h += '<label class="field"><span>Category</span><select id="evCat">';
-    for(var j2=0;j2<EVENT_CATEGORIES.length;j2++) h += '<option value="'+EVENT_CATEGORIES[j2]+'">'+catLabel(EVENT_CATEGORIES[j2])+'</option>';
-    h += '</select></label>';
-    h += '<label class="field"><span>Date & time</span><input id="evTime" type="datetime-local" required value="'+toLocalInput(new Date(Date.now()+86400000).toISOString())+'"></label>';
-    h += '<label class="field"><span>Location</span><input id="evLoc"></label>';
-    h += '<label class="field"><span>Description</span><textarea id="evDesc"></textarea></label>';
-    h += '<button type="submit" class="btn btn-primary">'+icon('plus')+' Publish event</button></form></div>';
-    h += '<div class="card"><div class="card-h"><h2>Create announcement</h2></div>';
-    h += '<form onsubmit="createAnnouncement(event)">';
-    h += '<label class="field"><span>Title</span><input id="anTitle" required></label>';
-    h += '<label class="field"><span>Body</span><textarea id="anBody" required></textarea></label>';
-    h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="anPinned" style="width:auto"> Pin to top</label>';
-    h += '<button type="submit" class="btn btn-primary">'+icon('plus')+' Publish announcement</button></form></div>';
-    h += '<div class="card"><div class="card-h"><h2>Add member</h2></div>';
-    h += '<form onsubmit="addMember(event)">';
-    h += '<label class="field"><span>Full name</span><input id="mName" required></label>';
-    h += '<label class="field"><span>Phone</span><input id="mPhone" placeholder="07XX XXX XXX" required></label>';
-    h += '<label class="field"><span>Password (they use to log in)</span><input id="mPass" type="text" placeholder="e.g. bukaki2025"></label>';
-    h += '<label class="field"><span>Reg. number</span><input id="mReg"></label>';
-    h += '<label class="field"><span>Email</span><input id="mEmail" type="email"></label>';
-    h += '<label class="field"><span>Year</span><select id="mYear">';
-    for(var y2=1;y2<=6;y2++) h += '<option value="'+y2+'">Year '+y2+'</option>';
-    h += '</select></label>';
-    h += '<label class="field"><span>Course</span><input id="mCourse"></label>';
-    h += '<label class="field"><span>Diocese</span><select id="mDiocese"><option>Bungoma</option><option>Kakamega</option><option>Kitale</option><option>Other</option></select></label>';
-    h += '<label class="field"><span>Family</span><select id="mFamily">';
-    for(var fi2=0;fi2<DB.families.length;fi2++) h += '<option value="'+DB.families[fi2].id+'">'+DB.families[fi2].number+'. '+esc(DB.families[fi2].name)+'</option>';
-    h += '</select></label>';
-    h += '<label class="field"><span>Role</span><select id="mRole">';
-    for(var rk2 in ROLES) h += '<option value="'+rk2+'">'+ROLES[rk2]+'</option>';
-    h += '</select></label>';
-    h += '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="mCatholic" checked style="width:auto"> Active Catholic</label>';
-    h += '<button type="submit" class="btn btn-primary">'+icon('plus')+' Add member</button></form></div>';
-  }
-  if(tab==='manage'){
-    h += '<div class="card"><div class="card-h"><h2>Manage events</h2></div>';
-    var sortedEvents = DB.events.slice().sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);});
-    if(sortedEvents.length===0) h += '<p class="muted">No events yet.</p>';
-    for(var ei=0;ei<sortedEvents.length;ei++){
-      var e2 = sortedEvents[ei];
-      var dateStr = new Date(e2.starts_at).toLocaleDateString('en-KE',{year:'numeric',month:'2-digit',day:'2-digit'});
-      h += '<div class="card" style="box-shadow:none;border:1px solid var(--border);padding:16px;margin-bottom:12px">';
-      h += '<span class="chip">'+esc(catLabel(e2.category))+'</span>';
-      h += '<h3 style="font-size:16px;font-weight:600;margin:8px 0 4px">'+esc(e2.title)+'</h3>';
-      h += '<p class="muted small">'+dateStr+(e2.location?' · '+esc(e2.location):'')+'</p>';
-      h += '<button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteEvent(\''+e2.id+'\')">'+icon('trash')+' Delete</button>';
-      h += '</div>';
-    }
-    h += '</div>';
-    h += '<div class="card"><div class="card-h"><h2>Manage announcements</h2></div>';
-    if(DB.announcements.length===0) h += '<p class="muted">No announcements yet.</p>';
-    for(var ai=0;ai<DB.announcements.length;ai++){
-      var a3 = DB.announcements[ai];
-      var dateStr2 = new Date(a3.created_at).toLocaleDateString('en-KE',{year:'numeric',month:'2-digit',day:'2-digit'});
-      h += '<div class="card" style="box-shadow:none;border:1px solid var(--border);padding:16px;margin-bottom:12px">';
-      h += '<h3 style="font-size:16px;font-weight:600;margin-bottom:4px">'+esc(a3.title)+'</h3>';
-      h += '<p class="muted small">'+dateStr2+(a3.pinned?' · Pinned':'')+'</p>';
-      h += '<button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteAnnouncement(\''+a3.id+'\')">'+icon('trash')+' Delete</button>';
-      h += '</div>';
-    }
-    h += '</div>';
-  }
-  if(tab==='data'){
-    h += '<div class="card"><div class="card-h"><h2>Backup</h2></div>';
-    h += '<p class="muted mb">Copy all data as JSON. Save it somewhere safe.</p>';
-    h += '<button class="btn btn-outline" onclick="copyBackup()">Copy data as JSON</button></div>';
-    h += '<div class="card"><div class="card-h"><h2>Statistics</h2></div>';
-    h += '<p style="padding:4px 0">Members: <b>'+DB.members.length+'</b></p>';
-    h += '<p style="padding:4px 0">Events: <b>'+DB.events.length+'</b></p>';
-    h += '<p style="padding:4px 0">Announcements: <b>'+DB.announcements.length+'</b></p>';
-    h += '<p style="padding:4px 0">Prayer intentions: <b>'+DB.prayerIntentions.length+'</b></p>';
-    h += '<p style="padding:4px 0">Total contributions: <b>'+fmtKES(DB.payments.reduce(function(s,p){return s+Number(p.amount);},0))+'</b></p>';
-    h += '</div>';
-    if(isSA(u)){
-      h += '<div class="card" style="border:1px solid #FEE2E2"><div class="card-h"><h2 style="color:#991B1B">★ Danger zone</h2></div>';
-      h += '<p class="muted mb">Wipe all data and start fresh. Only Super Admin can do this.</p>';
-      h += '<button class="btn btn-danger" onclick="resetEverything()">Reset everything</button></div>';
-    }
-  }
-  h += '<div class="access-card" style="margin-top:16px"><div class="check">'+icon('check')+'</div>';
-  h += '<div><h3>Administrator access active</h3>';
-  h += '<p>'+(isSA(u)?'Member · Leader · Super Administrator':'Member · Leader · Administrator')+'</p>';
-  h += '<p class="small">Signed in as '+esc(u.full_name)+' · '+(ROLES[u.role]||u.role)+'</p></div></div>';
-  return h;
-}
-function viewRegister(){
-  var famOpts = DB.families.map(function(f){return '<option value="'+f.id+'">'+f.number+'. '+esc(f.name)+'</option>';}).join('');
-  var yearOpts = [1,2,3,4,5,6].map(function(y){return '<option value="'+y+'">Year '+y+'</option>';}).join('');
-  var dioOpts = ['Bungoma','Kakamega','Kitale','Other'].map(function(d){return '<option>'+d+'</option>';}).join('');
-  return '<div class="card" style="max-width:640px;margin:24px auto">'+
-    '<h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Join BUKAKI</h2>'+
-    '<p class="muted mb">Registration: '+fmtKES(FEES.registration)+' · Subscription: '+fmtKES(FEES.subscription)+'/semester</p>'+
-    '<form onsubmit="doRegister(event)">'+
-    '<div class="edit-form" style="margin:0 0 14px"><div class="grid2">'+
-    '<label class="field"><span>Full name *</span><input id="rName" required></label>'+
-    '<label class="field"><span>Phone (M-Pesa) *</span><input id="rPhone" type="tel" required placeholder="07XX XXX XXX"></label>'+
-    '<label class="field"><span>Password *</span><input id="rPass" type="password" required minlength="4" placeholder="Min 4 characters"></label>'+
-    '<label class="field"><span>Reg. number</span><input id="rReg" placeholder="e.g. EDS/325/21"></label>'+
-    '<label class="field"><span>Email</span><input id="rEmail" type="email"></label>'+
-    '<label class="field"><span>Year</span><select id="rYear">'+yearOpts+'</select></label>'+
-    '<label class="field"><span>Course</span><input id="rCourse"></label>'+
-    '<label class="field"><span>Diocese</span><select id="rDiocese">'+dioOpts+'</select></label>'+
-    '<label class="field"><span>Family</span><select id="rFamily">'+famOpts+'</select></label>'+
-    '</div></div>'+
-    '<label style="display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-bottom:14px"><input type="checkbox" id="rCatholic" checked style="width:auto;margin-top:3px"> I am a Catholic student (or accept the Catholic ethos, Art. 1.1.1)</label>'+
-    '<button type="submit" class="btn btn-primary btn-block">Pay '+fmtKES(FEES.registration)+' & Join</button>'+
-    '<p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'login\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">Already a member? Sign in</a></p>'+
-    '</form></div>';
-}
-function doRegister(e){
-  e.preventDefault();
-  var f = {
-    id: uid('m'),
-    full_name: document.getElementById('rName').value.trim(),
-    phone: normPhone(document.getElementById('rPhone').value),
-    reg_number: document.getElementById('rReg').value.trim() || null,
-    email: document.getElementById('rEmail').value.trim() || null,
-    year_of_study: Number(document.getElementById('rYear').value),
-    course: document.getElementById('rCourse').value.trim() || null,
-    diocese: document.getElementById('rDiocese').value,
-    is_catholic: document.getElementById('rCatholic').checked,
-    family_id: document.getElementById('rFamily').value,
-    role: 'member',
-    status: 'active',
-    joined_at: new Date().toISOString(),
-    semester_joined: sem(),
-    membership_years: 0,
-    oath_accepted_at: null,
-    is_super_admin: false,
-    password: document.getElementById('rPass').value
-  };
-  if(!f.full_name || !f.phone){toast('Name and phone are required.','error');return;}
-  if(!f.password || f.password.length < 4){toast('Password must be at least 4 characters.','error');return;}
-  for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone already registered. Please sign in.','error');return;}}
-  DB.members.push(f);
-  DB.payments.push({id:uid('p'),member_id:f.id,type:'registration',amount:FEES.registration,semester:sem(),mpesa_ref:'SIM'+Math.random().toString(36).slice(2,9).toUpperCase(),paid_at:new Date().toISOString()});
-  DB.currentUserId = f.id;
-  saveDB();
-  toast('Karibu '+f.full_name+'!');
-  go('dashboard');
-}
-function viewLogin(){
-  return '<div class="card" style="max-width:440px;margin:24px auto">'+
-    '<h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Sign in</h2>'+
-    '<p class="muted mb">Enter your phone number and password.</p>'+
-    '<label class="field"><span>Phone number</span><input id="loginPhone" placeholder="07XX XXX XXX" type="tel" autocomplete="tel"></label>'+
-    '<label class="field"><span>Password</span><input id="loginPass" type="password" placeholder="Your password" autocomplete="current-password"></label>'+
-    '<button class="btn btn-primary btn-block" onclick="doLogin()">Sign in</button>'+
-    '<p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'register\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">New here? Join BUKAKI</a></p>'+
-    '</div>';
-}
-function render(){
-  renderSidebar();
-  var title = PAGE_TITLES[ROUTE] || 'Dashboard';
-  document.getElementById('pageTitle').textContent = title;
-  var html;
-  switch(ROUTE){
-    case 'login': html = viewLogin(); break;
-    case 'register': html = viewRegister(); break;
-    case 'members': html = viewMembers(); break;
-    case 'families': html = viewFamilies(); break;
-    case 'events': html = viewEvents(); break;
-    case 'announcements': html = viewAnnouncements(); break;
-    case 'prayer': html = viewPrayer(); break;
-    case 'attendance': html = viewAttendance(); break;
-    case 'contributions': html = viewContributions(); break;
-    case 'leadership': html = viewLeadership(); break;
-    case 'directory': html = viewDirectory(); break;
-    case 'constitution': html = viewConstitution(); break;
-    case 'elections': html = viewElections(); break;
-    case 'admin': html = viewAdmin(); break;
-    default: html = viewDashboard();
-  }
-  document.getElementById('app').innerHTML = html;
-}
-var LAST_SYNC_ID = null;
-var REFRESHING = false;
-
-async function pullFromCloud(){
-  if(REFRESHING || !window.cloudLoad) return;
-  REFRESHING = true;
-  try {
-    var cloud = await window.cloudLoad();
-    if(cloud && cloud.families && cloud.families.length){
-      var cloudIds = (cloud.members||[]).map(function(m){return m.id;}).sort().join(',');
-      var cloudStamp = (cloud.members||[]).length + '|' + (cloud.events||[]).length + '|' + cloudIds;
-      if(cloudStamp !== LAST_SYNC_ID){
-        LAST_SYNC_ID = cloudStamp;
-        var wasUser = DB.currentUserId;
-        DB = cloud;
-        DB.currentUserId = wasUser;
-        localStorage.setItem(DB_KEY, JSON.stringify(DB));
-        render();
-      }
-    }
-  } catch(e) { console.error('Pull failed', e); }
-  REFRESHING = false;
-}
-
-(async function(){
-  if(window.cloudLoad){
-    try {
-      if(window.supabaseClient) await window.supabaseClient.auth.signInAnonymously();
-      var cloud = await window.cloudLoad();
-      if(cloud && cloud.families && cloud.families.length){
-        DB = cloud;
-        localStorage.setItem(DB_KEY, JSON.stringify(DB));
-        var cloudIds = (cloud.members||[]).map(function(m){return m.id;}).sort().join(',');
-        LAST_SYNC_ID = (cloud.members||[]).length + '|' + (cloud.events||[]).length + '|' + cloudIds;
-      } else {
-        if(window.cloudSave) await window.cloudSave(DB);
-      }
-    } catch(e) { console.error('Cloud init failed', e); }
-  }
-  render();
-  setInterval(pullFromCloud, 20000);
-  document.addEventListener('visibilitychange', function(){
-    if(!document.hidden) pullFromCloud();
-  });
-})();
+function startEditMember(id){EDITING_MEMBER_ID=id;render();}
+function cancelEditMember(){EDITING_MEMBER_ID=null;render();}
+function saveEditedMember(e){e.preventDefault();var id=EDITING_MEMBER_ID;var m=memberById(id);if(!m)return;var newPhone=normPhone(document.getElementById('em_phone').value);for(var i=0;i<DB.members.length;i++){if(DB.members[i].id!==id && DB.members[i].phone===newPhone){toast('Phone already used.','error');return;}}m.full_name=document.getElementById('em_name').value.trim()||m.full_name;m.phone=newPhone;m.reg_number=document.getElementById('em_reg').value.trim()||null;m.email=document.getElementById('em_email').value.trim()||null;m.year_of_study=Number(document.getElementById('em_year').value);m.course=document.getElementById('em_course').value.trim()||null;m.diocese=document.getElementById('em_diocese').value;m.family_id=document.getElementById('em_family').value;m.is_catholic=document.getElementById('em_catholic').checked;var newPass=document.getElementById('em_pass').value;if(newPass && newPass.length>=4)m.password=newPass;if(isSA(m)){m.is_super_admin=true;m.phone=SUPER_ADMIN_PHONE;}else{m.role=document.getElementById('em_role').value;m.status=document.getElementById('em_status').value;}saveDB();toast(m.full_name+' updated.');EDITING_MEMBER_ID=null;render();}
+function assignLeadership(role,memberId){for(var i=0;i<DB.members.length;i++){if(DB.members[i].role===role && DB.members[i].id!==memberId && !isSA(DB.members[i])){DB.members[i].role='member';}}if(memberId){var nm=memberById(memberId);if(nm && !isSA(nm))nm.role=role;}saveDB();toast(ROLES[role]+' updated.');render();}
+function doLogin(){var phone=normPhone(document.getElementById('loginPhone').value);var pass=document.getElementById('loginPass').value;var found=null;for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===phone){found=DB.members[i];break;}}if(!found){toast('No member found. Please sign up.','error');return;}if(!found.password){toast('No password set. Contact admin.','error');return;}if(found.password!==pass){toast('Wrong password.','error');return;}DB.currentUserId=found.id;saveDB();toast(isSA(found)?'★ Karibu Super Admin':'Karibu '+found.full_name);go('dashboard');}
+function logout(){DB.currentUserId=null;saveDB();toast('Signed out.');go('dashboard');}
+function affirmOath(){var m=me();if(!m)return;m.oath_accepted_at=new Date().toISOString();saveDB();toast('Oath affirmed.');render();}
+function createEvent(e){e.preventDefault();var title=document.getElementById('evTitle').value.trim();var cat=document.getElementById('evCat').value;var dt=document.getElementById('evTime').value;var loc=document.getElementById('evLoc').value.trim();var desc=document.getElementById('evDesc').value.trim();if(!title||!dt){toast('Title and time required.','error');return;}DB.events.push({id:uid('e'),title:title,description:desc||null,category:cat,starts_at:new Date(dt).toISOString(),location:loc||null,semester:sem(),created_by:DB.currentUserId});saveDB();toast('Event published.');render();}
+function deleteEvent(id){if(!confirm('Delete event?'))return;DB.events=DB.events.filter(function(x){return x.id!==id;});saveDB();toast('Deleted.');render();}
+function createAnnouncement(e){e.preventDefault();var title=document.getElementById('anTitle').value.trim();var body=document.getElementById('anBody').value.trim();var pinned=document.getElementById('anPinned').checked;if(!title||!body){toast('Title and body required.','error');return;}DB.announcements.unshift({id:uid('a'),title:title,body:body,pinned:pinned,created_at:new Date().toISOString(),created_by:DB.currentUserId});saveDB();toast('Published.');render();}
+function deleteAnnouncement(id){if(!confirm('Delete announcement?'))return;DB.announcements=DB.announcements.filter(function(x){return x.id!==id;});saveDB();toast('Deleted.');render();}
+function addMember(e){e.preventDefault();var f={id:uid('m'),full_name:document.getElementById('mName').value.trim(),phone:normPhone(document.getElementById('mPhone').value),reg_number:document.getElementById('mReg').value.trim()||null,email:document.getElementById('mEmail').value.trim()||null,year_of_study:Number(document.getElementById('mYear').value),course:document.getElementById('mCourse').value.trim()||null,diocese:document.getElementById('mDiocese').value,is_catholic:document.getElementById('mCatholic').checked,family_id:document.getElementById('mFamily').value,role:document.getElementById('mRole').value,status:'active',joined_at:new Date().toISOString(),semester_joined:sem(),membership_years:0,oath_accepted_at:null,is_super_admin:false,password:document.getElementById('mPass').value||null};if(!f.full_name||!f.phone){toast('Name and phone required.','error');return;}for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone in use.','error');return;}}DB.members.push(f);saveDB();toast(f.full_name+' added.');render();}
+function deleteMember(id){var m=memberById(id);if(!m)return;if(isSA(m)){toast('Cannot delete Super Admin.','error');return;}if(!confirm('Delete '+m.full_name+'?'))return;DB.members=DB.members.filter(function(x){return x.id!==id;});saveDB();toast('Deleted.');render();}
+function submitPrayer(e){e.preventDefault();var m=me();if(!m)return;var text=document.getElementById('prText').value.trim();if(!text){toast('Type intention.','error');return;}DB.prayerIntentions.unshift({id:uid('pr'),text:text,member_id:m.id,created_at:new Date().toISOString(),pray_count:0});saveDB();toast('Submitted.');render();}
+function prayFor(id){for(var i=0;i<DB.prayerIntentions.length;i++){if(DB.prayerIntentions[i].id===id){DB.prayerIntentions[i].pray_count++;break;}}saveDB();toast('🙏');render();}
+function deletePrayer(id){if(!confirm('Delete?'))return;DB.prayerIntentions=DB.prayerIntentions.filter(function(x){return x.id!==id;});saveDB();render();}
+function toggleAttendance(eid,mid){var found=false;for(var i=0;i<DB.attendance.length;i++){if(DB.attendance[i].event_id===eid && DB.attendance[i].member_id===mid){DB.attendance[i].present=!DB.attendance[i].present;found=true;break;}}if(!found)DB.attendance.push({id:uid('at'),event_id:eid,member_id:mid,present:true,marked_at:new Date().toISOString()});saveDB();render();}
+function switchAdminTab(t){window._adminTab=t;render();}
+function resetEverything(){if(!isSA(me()))return;if(!confirm('Reset EVERYTHING?'))return;if(!confirm('Really sure?'))return;localStorage.removeItem(DB_KEY);location.reload();}
+function copyBackup(){var json=JSON.stringify(DB,null,2);if(navigator.clipboard){navigator.clipboard.writeText(json).then(function(){toast('Copied.');},function(){prompt('Copy:',json);});}else{prompt('Copy:',json);}}
+function castVote(elId,candId){var u=me();if(!u)return;for(var i=0;i<DB.votes.length;i++){if(DB.votes[i].election_id===elId && DB.votes[i].voter_id===u.id){toast('Already voted.','error');return;}}DB.votes.push({id:uid('v'),election_id:elId,voter_id:u.id,candidate_id:candId,cast_at:new Date().toISOString()});for(var j=0;j<DB.candidacies.length;j++){if(DB.candidacies[j].election_id===elId && DB.candidacies[j].member_id===candId){DB.candidacies[j].votes++;}}saveDB();toast('Vote recorded.');render();}
+function renderSidebar(){var u=me();var menu=[['dashboard','Dashboard','dashboard'],['members','Members','members'],['families','Families','families'],['events','Events','events'],['announcements','Announcements','announcements'],['prayer','Prayer','prayer'],['attendance','Attendance','attendance'],['contributions','Contributions','contributions'],['leadership','Leadership','leadership'],['directory','Directory','directory'],['constitution','Constitution','constitution'],['elections','Elections','elections']];if(isAdmin(u))menu.push(['admin','Administrator','admin']);var html='';for(var i=0;i<menu.length;i++){var r=menu[i][0],label=menu[i][1],ic=menu[i][2];html+='<button class="sb-item '+(ROUTE===r?'active':'')+'" onclick="go(\''+r+'\')">'+icon(ic)+'<span>'+label+'</span></button>';}document.getElementById('sidebarMenu').innerHTML=html;}
+function viewDashboard(){var u=me();var upcoming=DB.events.filter(function(e){return new Date(e.starts_at)>=new Date();}).sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at);});var activeCount=DB.members.filter(function(m){return m.status==='active'||m.status==='reinstated';}).length;var annCount=DB.announcements.length,prayerCount=DB.prayerIntentions.length;
+if(!u){var h='<div class="hero"><div class="hero-label">Welcome to BUKAKI</div><h1>Growing together in faith and service.</h1><p>A digital home for University of Eldoret Catholic comrades to connect, pray, serve and lead.</p><div class="hero-actions"><button class="hero-btn solid" onclick="go(\'register\')">Join BUKAKI</button><button class="hero-btn" onclick="go(\'events\')">'+icon('events')+' View events</button><button class="hero-btn" onclick="go(\'login\')">Sign in</button></div></div><div class="stats-grid"><div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+activeCount+'</div></div><div class="stat-card"><div class="stat-label">Upcoming events</div><div class="stat-value">'+upcoming.length+'</div></div><div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+annCount+'</div></div><div class="stat-card"><div class="stat-label">Prayer intentions</div><div class="stat-value">'+prayerCount+'</div></div></div><div class="card"><div class="card-h"><h2>Next events</h2><a onclick="go(\'events\')">View all '+icon('arrow')+'</a></div>';var next3=upcoming.slice(0,3);if(next3.length===0)h+='<p class="muted">No events yet.</p>';for(var i=0;i<next3.length;i++){var e=next3[i];h+='<div class="event-row">'+datePill(e.starts_at)+'<div class="event-info"><h3>'+esc(e.title)+'</h3><p>'+(e.location?esc(e.location):'')+'</p></div></div>';}h+='</div>';return h;}
+var h2='<div class="hero"><div class="hero-label">Welcome to BUKAKI</div><h1>Growing together in faith and service.</h1><p>A digital home for University of Eldoret Catholic comrades to connect, pray, serve and lead.</p><div class="hero-actions"><button class="hero-btn solid" onclick="go(\'events\')">'+icon('events')+' View events</button><button class="hero-btn" onclick="go(\'prayer\')">'+icon('prayer')+' Prayer intentions</button>';if(isAdmin(u))h2+='<button class="hero-btn" onclick="go(\'admin\')">'+icon('admin')+' Admin dashboard</button>';h2+='</div></div><div class="stats-grid"><div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+activeCount+'</div></div><div class="stat-card"><div class="stat-label">Upcoming events</div><div class="stat-value">'+upcoming.length+'</div></div><div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+annCount+'</div></div><div class="stat-card"><div class="stat-label">Prayer intentions</div><div class="stat-value">'+prayerCount+'</div></div></div>';h2+='<div class="card"><div class="card-h"><h2>Next events</h2><a onclick="go(\'events\')">View all '+icon('arrow')+'</a></div>';var next=upcoming.slice(0,3);if(next.length===0)h2+='<p class="muted">No events scheduled yet.</p>';for(var k=0;k<next.length;k++){var e2=next[k];var timeOnly=new Date(e2.starts_at).toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});h2+='<div class="event-row">'+datePill(e2.starts_at)+'<div class="event-info"><h3>'+esc(e2.title)+'</h3><p>'+timeOnly+(e2.location?' · '+esc(e2.location):'')+'</p></div></div>';}h2+='</div><div class="card"><div class="card-h"><h2>Latest announcements</h2><a onclick="go(\'announcements\')">View all '+icon('arrow')+'</a></div>';var anns2=DB.announcements.slice(0,2);if(anns2.length===0)h2+='<p class="muted">No announcements yet.</p>';for(var l=0;l<anns2.length;l++){var a2=anns2[l];h2+='<div class="ann-item"><div class="ann-h"><h3>'+esc(a2.title)+'</h3>'+(a2.pinned?'<span class="chip pinned">Pinned</span>':'')+'</div><p>'+esc(a2.body)+'</p></div>';}h2+='</div>';return h2;}
+function viewMembers(){var u=me();var canEdit=isAdmin(u);var h='<div class="card"><div class="card-h"><h2>All members ('+DB.members.length+')</h2>';if(canEdit)h+='<span class="chip">Admin: tap Edit to change</span>';h+='</div>';for(var i=0;i<DB.members.length;i++){var m=DB.members[i];var sa=isSA(m);var editing=EDITING_MEMBER_ID===m.id;if(editing){h+='<div class="edit-form"><h3 style="font-size:15px;font-weight:700;margin-bottom:12px">Editing: '+esc(m.full_name)+'</h3><form onsubmit="saveEditedMember(event)"><div class="grid2"><label class="field"><span>Full name</span><input id="em_name" value="'+esc(m.full_name)+'" required></label><label class="field"><span>Phone</span><input id="em_phone" value="'+esc(m.phone)+'" required></label><label class="field"><span>Reg. number</span><input id="em_reg" value="'+esc(m.reg_number||'')+'"></label><label class="field"><span>Email</span><input id="em_email" value="'+esc(m.email||'')+'" type="email"></label><label class="field"><span>Year</span><select id="em_year">';for(var y=1;y<=6;y++)h+='<option value="'+y+'"'+(m.year_of_study===y?' selected':'')+'>Year '+y+'</option>';h+='</select></label><label class="field"><span>Course</span><input id="em_course" value="'+esc(m.course||'')+'"></label><label class="field"><span>Diocese</span><select id="em_diocese">';var dios=['Bungoma','Kakamega','Kitale','Other'];for(var d=0;d<dios.length;d++)h+='<option'+(m.diocese===dios[d]?' selected':'')+'>'+dios[d]+'</option>';h+='</select></label><label class="field"><span>Family</span><select id="em_family">';for(var fi=0;fi<DB.families.length;fi++)h+='<option value="'+DB.families[fi].id+'"'+(m.family_id===DB.families[fi].id?' selected':'')+'>'+esc(DB.families[fi].name)+'</option>';h+='</select></label>';if(!sa){h+='<label class="field"><span>Role</span><select id="em_role">';for(var rk in ROLES)h+='<option value="'+rk+'"'+(m.role===rk?' selected':'')+'>'+ROLES[rk]+'</option>';h+='</select></label><label class="field"><span>Status</span><select id="em_status">';var sts=['active','pending','warned','revoked','reinstated'];for(var si=0;si<sts.length;si++)h+='<option value="'+sts[si]+'"'+(m.status===sts[si]?' selected':'')+'>'+sts[si]+'</option>';h+='</select></label>';}h+='<label class="field"><span>New Password (blank = keep)</span><input id="em_pass" type="text"></label></div><label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';if(sa)h+='<p class="muted small mb">★ Super Admin locked</p>';h+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="submit" class="btn btn-success">'+icon('check')+' Save</button><button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button></div></form></div>';}else{var pd=canEdit?esc(m.phone):'••••••••';h+='<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'"><div class="member-avatar">'+esc(initials(m.full_name))+'</div><div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3><p>'+(ROLES[m.role]||m.role)+' · '+pd+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div><span class="badge '+m.status+'">'+m.status+'</span>';if(canEdit){h+='<div class="member-actions"><button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';if(!sa)h+='<button class="btn btn-danger btn-sm" onclick="deleteMember(\''+m.id+'\')">'+icon('trash')+'</button>';h+='</div>';}h+='</div>';}}h+='</div>';return h;}
+function viewFamilies(){var h='';for(var i=0;i<DB.families.length;i++){var f=DB.families[i];var members=DB.members.filter(function(m){return m.family_id===f.id && (m.status==='active'||m.status==='reinstated');});var dad=null,mum=null;for(var j=0;j<members.length;j++){if(members[j].role==='family_head_dad')dad=members[j];if(members[j].role==='family_head_mum')mum=members[j];}h+='<div class="card"><div class="card-h"><h2>'+esc(f.name)+'</h2><span class="chip">Family '+f.number+'</span></div><p class="muted mb">Patron: '+esc(f.patron)+' · '+members.length+' members</p>';if(dad||mum)h+='<p class="small"><b>Dad:</b> '+(dad?esc(dad.full_name):'Vacant')+' · <b>Mum:</b> '+(mum?esc(mum.full_name):'Vacant')+'</p>';h+='</div>';}return h;}
+function viewEvents(){var upcoming=DB.events.filter(function(e){return new Date(e.starts_at)>=new Date();}).sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at);});var past=DB.events.filter(function(e){return new Date(e.starts_at)<new Date();}).sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);});var h='<div class="card"><div class="card-h"><h2>Upcoming events</h2></div>';if(upcoming.length===0)h+='<p class="muted">No upcoming events.</p>';for(var i=0;i<upcoming.length;i++){var e=upcoming[i];var df=new Date(e.starts_at).toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});var to=new Date(e.starts_at).toLocaleTimeString('en-KE',{hour:'numeric',minute:'2-digit'});h+='<div style="border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px"><span class="chip">'+esc(catLabel(e.category))+'</span><h3 style="font-size:17px;font-weight:600;margin:10px 0 6px">'+esc(e.title)+'</h3>';if(e.description)h+='<p class="muted" style="margin-bottom:10px">'+esc(e.description)+'</p>';h+='<p style="font-size:14px;font-weight:600;margin-bottom:4px">'+df+'</p><p class="muted">'+to+(e.location?' · '+esc(e.location):'')+'</p></div>';}h+='</div>';if(past.length>0){h+='<div class="card"><div class="card-h"><h2>Past events</h2></div>';for(var j=0;j<past.length;j++)h+='<div class="member-row"><div class="member-info"><h3>'+esc(past[j].title)+'</h3><p>'+fmtDate(past[j].starts_at)+'</p></div></div>';h+='</div>';}return h;}
+function viewAnnouncements(){var h='<div class="card"><div class="card-h"><h2>Community announcements</h2></div>';if(DB.announcements.length===0)h+='<p class="muted">No announcements yet.</p>';var sorted=DB.announcements.slice().sort(function(a,b){if(a.pinned && !b.pinned)return -1;if(!a.pinned && b.pinned)return 1;return new Date(b.created_at)-new Date(a.created_at);});for(var i=0;i<sorted.length;i++){var a=sorted[i];h+='<div class="ann-item"><div class="ann-h"><h3>'+esc(a.title)+'</h3>'+(a.pinned?'<span class="chip pinned">Pinned</span>':'')+'</div><p>'+esc(a.body)+'</p><p class="small" style="margin-top:8px">'+fmtDate(a.created_at)+'</p>';if(isAdmin(me()))h+='<button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteAnnouncement(\''+a.id+'\')">'+icon('trash')+'</button>';h+='</div>';}h+='</div>';return h;}
+function viewPrayer(){var u=me();var h='';if(u){h+='<div class="card"><div class="card-h"><h2>Submit intention</h2></div><form onsubmit="submitPrayer(event)"><label class="field"><span>Your intention</span><textarea id="prText" required></textarea></label><button type="submit" class="btn btn-primary btn-block">Submit</button></form></div>';}h+='<div class="card"><div class="card-h"><h2>Prayer wall ('+DB.prayerIntentions.length+')</h2></div>';if(DB.prayerIntentions.length===0)h+='<p class="muted">No intentions yet.</p>';for(var i=0;i<DB.prayerIntentions.length;i++){var p=DB.prayerIntentions[i];var author=memberById(p.member_id);h+='<div class="prayer-item"><h3>'+esc(author?author.full_name:'Anonymous')+'</h3><p>'+esc(p.text)+'</p><div class="prayer-meta"><span>'+fmtDate(p.created_at)+'</span><span><button class="btn btn-outline btn-sm" onclick="prayFor(\''+p.id+'\')">🙏 ('+p.pray_count+')</button>';if(isAdmin(u))h+=' <button class="btn btn-danger btn-sm" onclick="deletePrayer(\''+p.id+'\')">'+icon('trash')+'</button>';h+='</span></div></div>';}h+='</div>';return h;}
+function viewAttendance(){var u=me();if(!isAdmin(u))return '<div class="card"><h2>Access denied</h2></div>';var h='';var past=DB.events.slice().sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);}).slice(0,5);if(past.length===0)return '<div class="card"><p class="muted">No events.</p></div>';for(var i=0;i<past.length;i++){var e=past[i];h+='<div class="card"><div class="card-h"><h2>'+esc(e.title)+'</h2><span class="chip">'+fmtDate(e.starts_at)+'</span></div>';for(var j=0;j<DB.members.length;j++){var m=DB.members[j];var at=null;for(var k=0;k<DB.attendance.length;k++){if(DB.attendance[k].event_id===e.id && DB.attendance[k].member_id===m.id){at=DB.attendance[k];break;}}var isP=at&&at.present;h+='<div class="member-row" style="cursor:pointer" onclick="toggleAttendance(\''+e.id+'\',\''+m.id+'\')"><div class="member-avatar">'+esc(initials(m.full_name))+'</div><div class="member-info"><h3>'+esc(m.full_name)+'</h3></div><span class="badge '+(isP?'active':'')+'">'+(isP?'Present':'Absent')+'</span></div>';}h+='</div>';}return h;}
+function viewContributions(){var u=me();var canSeeAll=isFinance(u);var myPayments=canSeeAll?DB.payments.slice().sort(function(a,b){return new Date(b.paid_at)-new Date(a.paid_at);}):DB.payments.filter(function(p){return p.member_id===DB.currentUserId;});var total=myPayments.reduce(function(s,p){return s+Number(p.amount);},0);var h='<div class="card"><div class="card-h"><h2>'+(canSeeAll?'All contributions':'My contributions')+'</h2></div><p class="muted mb">Total: <b style="color:var(--burgundy)">'+fmtKES(total)+'</b></p>';if(myPayments.length===0)h+='<p class="muted">No payments.</p>';for(var i=0;i<myPayments.length;i++){var p=myPayments[i];var m=memberById(p.member_id);h+='<div class="member-row"><div class="member-info"><h3>'+(canSeeAll?esc(m?m.full_name:'-')+' · ':'')+esc(p.type.replace(/_/g,' '))+'</h3><p>'+fmtDate(p.paid_at)+'</p></div><span style="font-weight:600;color:var(--burgundy)">'+fmtKES(p.amount)+'</span></div>';}h+='</div>';return h;}
+function viewLeadership(){var h='<div class="card"><div class="card-h"><h2>BUKAKI leadership</h2></div>';for(var i=0;i<LEADERSHIP_POSITIONS.length;i++){var pos=LEADERSHIP_POSITIONS[i];var holder=null;for(var j=0;j<DB.members.length;j++){if(DB.members[j].role===pos.role && (DB.members[j].status==='active'||DB.members[j].status==='reinstated')){holder=DB.members[j];break;}}h+='<div class="leader-row"><div class="leader-avatar">'+icon('leadership')+'</div><div class="leader-info"><h3>'+ROLES[pos.role]+'</h3><p>'+(holder?esc(holder.full_name):(pos.desc||'Vacant'))+'</p></div></div>';}h+='</div>';var u=me();if(u){h+='<div class="access-card"><div class="check">'+icon('check')+'</div><div><h3>'+(isSA(u)?'Super Admin access':(isAdmin(u)?'Administrator access':'Member access'))+'</h3><p>Signed in as '+esc(u.full_name)+' · '+(ROLES[u.role]||u.role)+'</p></div></div>';}return h;}
+function viewConstitution(){var h='<div class="card"><div class="card-h"><h2>Constitution</h2></div><p class="muted">Adopted November 2024</p></div><div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Motto</h2><p style="font-style:italic;color:var(--burgundy)">"In Unity We Serve"</p></div><div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Vision</h2><p>To create, promote a united and ethical society.</p></div><div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:8px">Mission</h2><p>To cultivate a vibrant community of faith, knowledge, and service among Catholic university students.</p></div><div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Objectives</h2><ul style="list-style:none">';for(var i=0;i<OBJECTIVES.length;i++)h+='<li style="padding:6px 0;font-size:14px">· '+esc(OBJECTIVES[i])+'</li>';h+='</ul></div><div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Values</h2><div style="display:flex;flex-wrap:wrap;gap:6px">';for(var j=0;j<VALUES.length;j++)h+='<span class="family-chip">'+esc(VALUES[j])+'</span>';h+='</div></div>';return h;}
+function viewElections(){var h='<div class="card"><div class="card-h"><h2>Elections</h2></div><p class="muted">Free, fair, transparent.</p></div>';if(DB.elections.length===0){h+='<div class="card"><p class="muted">No elections scheduled.</p></div>';return h;}for(var i=0;i<DB.elections.length;i++){var el=DB.elections[i];var cands=DB.candidacies.filter(function(c){return c.election_id===el.id;});h+='<div class="card"><h2 style="font-size:16px;font-weight:600;margin-bottom:6px">'+(ROLES[el.position]||el.position)+'</h2><p class="small mb">'+fmtDT(el.opens_at)+' → '+fmtDT(el.closes_at)+'</p>';for(var j=0;j<cands.length;j++){var c=cands[j];var m=memberById(c.member_id);h+='<div class="member-row"><div class="member-info"><h3>'+esc(m?m.full_name:'-')+'</h3><p>'+c.votes+' votes</p></div>';if(el.status==='open')h+='<button class="btn btn-primary btn-sm" onclick="castVote(\''+el.id+'\',\''+c.member_id+'\')">Vote</button>';h+='</div>';}h+='</div>';}return h;}
+function viewDirectory(){var active=DB.members.filter(function(m){return m.status==='active'||m.status==='reinstated';});function section(title,list){var hh='<div class="card"><div class="card-h"><h2>'+title+' ('+list.length+')</h2></div>';if(list.length===0)hh+='<p class="muted">No records.</p>';for(var i=0;i<list.length;i++){var m=list[i];hh+='<div class="member-row"><div class="member-avatar">'+esc(initials(m.full_name))+'</div><div class="member-info"><h3>'+esc(m.full_name)+(isSA(m)?' <span class="badge super">★</span>':'')+'</h3><p>'+(ROLES[m.role]||m.role)+'</p></div></div>';}hh+='</div>';return hh;}var exec=active.filter(function(m){return EXEC_ROLES.indexOf(m.role)!==-1||isSA(m);});var heads=active.filter(function(m){return m.role.indexOf('family_head')===0;});var rest=active.filter(function(m){return EXEC_ROLES.indexOf(m.role)===-1 && m.role.indexOf('family_head')!==0 && !isSA(m);});return section('Executive Committee',exec)+section('Family Heads',heads)+section('Members',rest);}
+function viewAdmin(){var u=me();if(!isAdmin(u))return '<div class="card"><h2>Access denied</h2></div>';var tab=window._adminTab||'members';var h='<div class="hero" style="margin-bottom:20px"><div class="hero-label">Administrator Console</div><h1>BUKAKI Administration</h1><p>Manage the community from one protected workspace.</p></div><div class="stats-grid"><div class="stat-card"><div class="stat-label">Members</div><div class="stat-value">'+DB.members.length+'</div></div><div class="stat-card"><div class="stat-label">Events</div><div class="stat-value">'+DB.events.length+'</div></div><div class="stat-card"><div class="stat-label">Announcements</div><div class="stat-value">'+DB.announcements.length+'</div></div><div class="stat-card"><div class="stat-label">Your roles</div><div class="stat-value" style="font-size:14px;line-height:1.3">'+(isSA(u)?'Super Admin':'Admin')+' · '+(ROLES[u.role]||u.role)+'</div></div></div><div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:16px">';var tabs=[['members','Members'],['leadership','Leadership'],['create','Create'],['manage','Manage'],['data','Data']];for(var i=0;i<tabs.length;i++){h+='<button class="btn btn-sm '+(tab===tabs[i][0]?'btn-primary':'btn-outline')+'" onclick="switchAdminTab(\''+tabs[i][0]+'\')">'+tabs[i][1]+'</button>';}h+='</div>';
+if(tab==='members'){h+='<div class="card"><div class="card-h"><h2>All members ('+DB.members.length+')</h2><span class="chip">Tap Edit</span></div>';for(var mi=0;mi<DB.members.length;mi++){var m=DB.members[mi];var sa=isSA(m);var editing=EDITING_MEMBER_ID===m.id;if(editing){h+='<div class="edit-form"><h3 style="font-size:15px;font-weight:700;margin-bottom:12px">Editing: '+esc(m.full_name)+'</h3><form onsubmit="saveEditedMember(event)"><div class="grid2"><label class="field"><span>Full name</span><input id="em_name" value="'+esc(m.full_name)+'" required></label><label class="field"><span>Phone</span><input id="em_phone" value="'+esc(m.phone)+'" required></label><label class="field"><span>Reg. number</span><input id="em_reg" value="'+esc(m.reg_number||'')+'"></label><label class="field"><span>Email</span><input id="em_email" value="'+esc(m.email||'')+'" type="email"></label><label class="field"><span>Year</span><select id="em_year">';for(var y=1;y<=6;y++)h+='<option value="'+y+'"'+(m.year_of_study===y?' selected':'')+'>Year '+y+'</option>';h+='</select></label><label class="field"><span>Course</span><input id="em_course" value="'+esc(m.course||'')+'"></label><label class="field"><span>Diocese</span><select id="em_diocese">';var dios=['Bungoma','Kakamega','Kitale','Other'];for(var d=0;d<dios.length;d++)h+='<option'+(m.diocese===dios[d]?' selected':'')+'>'+dios[d]+'</option>';h+='</select></label><label class="field"><span>Family</span><select id="em_family">';for(var fi=0;fi<DB.families.length;fi++)h+='<option value="'+DB.families[fi].id+'"'+(m.family_id===DB.families[fi].id?' selected':'')+'>'+esc(DB.families[fi].name)+'</option>';h+='</select></label>';if(!sa){h+='<label class="field"><span>Role</span><select id="em_role">';for(var rk in ROLES)h+='<option value="'+rk+'"'+(m.role===rk?' selected':'')+'>'+ROLES[rk]+'</option>';h+='</select></label><label class="field"><span>Status</span><select id="em_status">';var sts=['active','pending','warned','revoked','reinstated'];for(var si=0;si<sts.length;si++)h+='<option value="'+sts[si]+'"'+(m.status===sts[si]?' selected':'')+'>'+sts[si]+'</option>';h+='</select></label>';}h+='<label class="field"><span>New Password</span><input id="em_pass" type="text"></label></div><label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="em_catholic" style="width:auto"'+(m.is_catholic?' checked':'')+'> Active Catholic</label>';if(sa)h+='<p class="muted small mb">★ Locked</p>';h+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="submit" class="btn btn-success">'+icon('check')+' Save</button><button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button></div></form></div>';}else{h+='<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'"><div class="member-avatar">'+esc(initials(m.full_name))+'</div><div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3><p>'+(ROLES[m.role]||m.role)+' · '+esc(m.phone)+'</p></div><span class="badge '+m.status+'">'+m.status+'</span><div class="member-actions"><button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';if(!sa)h+='<button class="btn btn-danger btn-sm" onclick="deleteMember(\''+m.id+'\')">'+icon('trash')+'</button>';h+='</div></div>';}}h+='</div>';}
+if(tab==='leadership'){h+='<div class="card"><div class="card-h"><h2>Assign leadership</h2></div><p class="muted mb">Pick a member for each position. Previous holder becomes Member.</p>';for(var li=0;li<LEADERSHIP_POSITIONS.length;li++){var pos=LEADERSHIP_POSITIONS[li];var holder=null;for(var hj=0;hj<DB.members.length;hj++){if(DB.members[hj].role===pos.role && !isSA(DB.members[hj])){holder=DB.members[hj];break;}}var saHolder=null;for(var sk=0;sk<DB.members.length;sk++){if(DB.members[sk].role===pos.role && isSA(DB.members[sk])){saHolder=DB.members[sk];break;}}h+='<div class="assign-row"><div><div class="assign-label">'+ROLES[pos.role]+'</div><div class="assign-sub">'+pos.desc+'</div>';if(saHolder)h+='<div class="assign-sub" style="color:var(--burgundy);font-weight:600">Current: '+esc(saHolder.full_name)+' (Super Admin)</div>';else if(holder)h+='<div class="assign-sub" style="color:var(--burgundy);font-weight:600">Current: '+esc(holder.full_name)+'</div>';else h+='<div class="assign-sub">Vacant</div>';h+='</div><select class="role-select" onchange="assignLeadership(\''+pos.role+'\', this.value)"><option value="">— Vacant —</option>';for(var mi2=0;mi2<DB.members.length;mi2++){var mem=DB.members[mi2];if(isSA(mem))continue;if(mem.status!=='active' && mem.status!=='reinstated')continue;h+='<option value="'+mem.id+'"'+(holder && holder.id===mem.id?' selected':'')+'>'+esc(mem.full_name)+' ('+esc(mem.phone)+')</option>';}h+='</select></div>';}h+='</div>';}
+if(tab==='create'){h+='<div class="card"><div class="card-h"><h2>Create event</h2></div><form onsubmit="createEvent(event)"><label class="field"><span>Title</span><input id="evTitle" required></label><label class="field"><span>Category</span><select id="evCat">';for(var j2=0;j2<EVENT_CATEGORIES.length;j2++)h+='<option value="'+EVENT_CATEGORIES[j2]+'">'+catLabel(EVENT_CATEGORIES[j2])+'</option>';h+='</select></label><label class="field"><span>Date & time</span><input id="evTime" type="datetime-local" required value="'+toLocalInput(new Date(Date.now()+86400000).toISOString())+'"></label><label class="field"><span>Location</span><input id="evLoc"></label><label class="field"><span>Description</span><textarea id="evDesc"></textarea></label><button type="submit" class="btn btn-primary">'+icon('plus')+' Publish event</button></form></div>';h+='<div class="card"><div class="card-h"><h2>Create announcement</h2></div><form onsubmit="createAnnouncement(event)"><label class="field"><span>Title</span><input id="anTitle" required></label><label class="field"><span>Body</span><textarea id="anBody" required></textarea></label><label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="anPinned" style="width:auto"> Pin to top</label><button type="submit" class="btn btn-primary">'+icon('plus')+' Publish announcement</button></form></div>';h+='<div class="card"><div class="card-h"><h2>Add member</h2></div><form onsubmit="addMember(event)"><label class="field"><span>Full name</span><input id="mName" required></label><label class="field"><span>Phone</span><input id="mPhone" placeholder="07XX XXX XXX" required></label><label class="field"><span>Password</span><input id="mPass" type="text"></label><label class="field"><span>Reg. number</span><input id="mReg"></label><label class="field"><span>Email</span><input id="mEmail" type="email"></label><label class="field"><span>Year</span><select id="mYear">';for(var y2=1;y2<=6;y2++)h+='<option value="'+y2+'">Year '+y2+'</option>';h+='</select></label><label class="field"><span>Course</span><input id="mCourse"></label><label class="field"><span>Diocese</span><select id="mDiocese"><option>Bungoma</option><option>Kakamega</option><option>Kitale</option><option>Other</option></select></label><label class="field"><span>Family</span><select id="mFamily">';for(var fi2=0;fi2<DB.families.length;fi2++)h+='<option value="'+DB.families[fi2].id+'">'+DB.families[fi2].number+'. '+esc(DB.families[fi2].name)+'</option>';h+='</select></label><label class="field"><span>Role</span><select id="mRole">';for(var rk2 in ROLES)h+='<option value="'+rk2+'">'+ROLES[rk2]+'</option>';h+='</select></label><label style="display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="mCatholic" checked style="width:auto"> Active Catholic</label><button type="submit" class="btn btn-primary">'+icon('plus')+' Add member</button></form></div>';}
+if(tab==='manage'){h+='<div class="card"><div class="card-h"><h2>Manage events</h2></div>';var sortedEvents=DB.events.slice().sort(function(a,b){return new Date(b.starts_at)-new Date(a.starts_at);});if(sortedEvents.length===0)h+='<p class="muted">No events.</p>';for(var ei=0;ei<sortedEvents.length;ei++){var e2=sortedEvents[ei];var ds=new Date(e2.starts_at).toLocaleDateString('en-KE',{year:'numeric',month:'2-digit',day:'2-digit'});h+='<div class="card" style="box-shadow:none;border:1px solid var(--border);padding:16px;margin-bottom:12px"><span class="chip">'+esc(catLabel(e2.category))+'</span><h3 style="font-size:16px;font-weight:600;margin:8px 0 4px">'+esc(e2.title)+'</h3><p class="muted small">'+ds+(e2.location?' · '+esc(e2.location):'')+'</p><button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteEvent(\''+e2.id+'\')">'+icon('trash')+' Delete</button></div>';}h+='</div><div class="card"><div class="card-h"><h2>Manage announcements</h2></div>';if(DB.announcements.length===0)h+='<p class="muted">None.</p>';for(var ai=0;ai<DB.announcements.length;ai++){var a3=DB.announcements[ai];var ds2=new Date(a3.created_at).toLocaleDateString('en-KE',{year:'numeric',month:'2-digit',day:'2-digit'});h+='<div class="card" style="box-shadow:none;border:1px solid var(--border);padding:16px;margin-bottom:12px"><h3 style="font-size:16px;font-weight:600;margin-bottom:4px">'+esc(a3.title)+'</h3><p class="muted small">'+ds2+(a3.pinned?' · Pinned':'')+'</p><button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteAnnouncement(\''+a3.id+'\')">'+icon('trash')+' Delete</button></div>';}h+='</div>';}
+if(tab==='data'){h+='<div class="card"><div class="card-h"><h2>Backup</h2></div><p class="muted mb">Copy all data as JSON.</p><button class="btn btn-outline" onclick="copyBackup()">Copy data</button></div>';h+='<div class="card"><div class="card-h"><h2>Statistics</h2></div><p style="padding:4px 0">Members: <b>'+DB.members.length+'</b></p><p style="padding:4px 0">Events: <b>'+DB.events.length+'</b></p><p style="padding:4px 0">Announcements: <b>'+DB.announcements.length+'</b></p><p style="padding:4px 0">Total: <b>'+fmtKES(DB.payments.reduce(function(s,p){return s+Number(p.amount);},0))+'</b></p></div>';if(isSA(u))h+='<div class="card" style="border:1px solid #FEE2E2"><div class="card-h"><h2 style="color:#991B1B">★ Danger zone</h2></div><button class="btn btn-danger" onclick="resetEverything()">Reset everything</button></div>';}
+h+='<div class="access-card" style="margin-top:16px"><div class="check">'+icon('check')+'</div><div><h3>Administrator access active</h3><p>Signed in as '+esc(u.full_name)+' · '+(ROLES[u.role]||u.role)+'</p></div></div>';return h;}
+function viewRegister(){var famOpts=DB.families.map(function(f){return '<option value="'+f.id+'">'+f.number+'. '+esc(f.name)+'</option>';}).join('');var yearOpts=[1,2,3,4,5,6].map(function(y){return '<option value="'+y+'">Year '+y+'</option>';}).join('');var dioOpts=['Bungoma','Kakamega','Kitale','Other'].map(function(d){return '<option>'+d+'</option>';}).join('');return '<div class="card" style="max-width:640px;margin:24px auto"><h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Join BUKAKI</h2><p class="muted mb">Registration: '+fmtKES(FEES.registration)+' · Subscription: '+fmtKES(FEES.subscription)+'/semester</p><form onsubmit="doRegister(event)"><div class="edit-form" style="margin:0 0 14px"><div class="grid2"><label class="field"><span>Full name *</span><input id="rName" required></label><label class="field"><span>Phone *</span><input id="rPhone" type="tel" required placeholder="07XX XXX XXX"></label><label class="field"><span>Password *</span><input id="rPass" type="password" required minlength="4" placeholder="Min 4 chars"></label><label class="field"><span>Reg. number</span><input id="rReg"></label><label class="field"><span>Email</span><input id="rEmail" type="email"></label><label class="field"><span>Year</span><select id="rYear">'+yearOpts+'</select></label><label class="field"><span>Course</span><input id="rCourse"></label><label class="field"><span>Diocese</span><select id="rDiocese">'+dioOpts+'</select></label><label class="field"><span>Family</span><select id="rFamily">'+famOpts+'</select></label></div></div><label style="display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-bottom:14px"><input type="checkbox" id="rCatholic" checked style="width:auto;margin-top:3px"> I am a Catholic student (Art. 1.1.1)</label><button type="submit" class="btn btn-primary btn-block">Pay '+fmtKES(FEES.registration)+' & Join</button><p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'login\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">Already a member? Sign in</a></p></form></div>';}
+function doRegister(e){e.preventDefault();var f={id:uid('m'),full_name:document.getElementById('rName').value.trim(),phone:normPhone(document.getElementById('rPhone').value),reg_number:document.getElementById('rReg').value.trim()||null,email:document.getElementById('rEmail').value.trim()||null,year_of_study:Number(document.getElementById('rYear').value),course:document.getElementById('rCourse').value.trim()||null,diocese:document.getElementById('rDiocese').value,is_catholic:document.getElementById('rCatholic').checked,family_id:document.getElementById('rFamily').value,role:'member',status:'active',joined_at:new Date().toISOString(),semester_joined:sem(),membership_years:0,oath_accepted_at:null,is_super_admin:false,password:document.getElementById('rPass').value};if(!f.full_name||!f.phone){toast('Name and phone required.','error');return;}if(!f.password||f.password.length<4){toast('Password min 4 chars.','error');return;}for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===f.phone){toast('Phone already registered.','error');return;}}DB.members.push(f);DB.payments.push({id:uid('p'),member_id:f.id,type:'registration',amount:FEES.registration,semester:sem(),mpesa_ref:'SIM'+Math.random().toString(36).slice(2,9).toUpperCase(),paid_at:new Date().toISOString()});DB.currentUserId=f.id;saveDB();toast('Karibu '+f.full_name+'!');go('dashboard');}
+function viewLogin(){return '<div class="card" style="max-width:440px;margin:24px auto"><h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Sign in</h2><p class="muted mb">Enter phone and password.</p><label class="field"><span>Phone number</span><input id="loginPhone" placeholder="07XX XXX XXX" type="tel" autocomplete="tel"></label><label class="field"><span>Password</span><input id="loginPass" type="password" placeholder="Your password" autocomplete="current-password"></label><button class="btn btn-primary btn-block" onclick="doLogin()">Sign in</button><p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'register\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">New here? Join BUKAKI</a></p></div>';}
+function render(){renderSidebar();var title=PAGE_TITLES[ROUTE]||'Dashboard';document.getElementById('pageTitle').textContent=title;var html;switch(ROUTE){case 'login':html=viewLogin();break;case 'register':html=viewRegister();break;case 'members':html=viewMembers();break;case 'families':html=viewFamilies();break;case 'events':html=viewEvents();break;case 'announcements':html=viewAnnouncements();break;case 'prayer':html=viewPrayer();break;case 'attendance':html=viewAttendance();break;case 'contributions':html=viewContributions();break;case 'leadership':html=viewLeadership();break;case 'directory':html=viewDirectory();break;case 'constitution':html=viewConstitution();break;case 'elections':html=viewElections();break;case 'admin':html=viewAdmin();break;default:html=viewDashboard();}document.getElementById('app').innerHTML=html;}
+var LAST_SYNC_ID=null;var REFRESHING=false;
+async function pullFromCloud(){if(REFRESHING||!window.cloudLoad)return;REFRESHING=true;try{var cloud=await window.cloudLoad();if(cloud && cloud.families && cloud.families.length){var cloudIds=(cloud.members||[]).map(function(m){return m.id;}).sort().join(',');var stamp=(cloud.members||[]).length+'|'+(cloud.events||[]).length+'|'+cloudIds;if(stamp!==LAST_SYNC_ID){LAST_SYNC_ID=stamp;var wasUser=DB.currentUserId;DB=cloud;DB.currentUserId=wasUser;localStorage.setItem(DB_KEY,JSON.stringify(DB));render();}}}catch(e){console.error('Pull failed',e);}REFRESHING=false;}
+(async function(){if(window.cloudLoad){try{if(window.supabaseClient)await window.supabaseClient.auth.signInAnonymously();var cloud=await window.cloudLoad();if(cloud && cloud.families && cloud.families.length){DB=cloud;localStorage.setItem(DB_KEY,JSON.stringify(DB));var ids=(cloud.members||[]).map(function(m){return m.id;}).sort().join(',');LAST_SYNC_ID=(cloud.members||[]).length+'|'+(cloud.events||[]).length+'|'+ids;}else{if(window.cloudSave)await window.cloudSave(DB);}}catch(e){console.error('Cloud init failed',e);}}render();setInterval(pullFromCloud,20000);document.addEventListener('visibilitychange',function(){if(!document.hidden)pullFromCloud();});})();
 </script>
 </body>
 </html>
