@@ -405,11 +405,9 @@ function doLogin(){
   var pass = document.getElementById('loginPass').value;
   var found = null;
   for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===phone){found=DB.members[i];break;}}
-  if(!found){toast('No member found with that phone.','error');return;}
-  if(!isSA(found)){
-    if(!found.password){toast('No password set. Ask admin to reset.','error');return;}
-    if(found.password !== pass){toast('Wrong password.','error');return;}
-  }
+  if(!found){toast('No member found with that phone. Please sign up.','error');return;}
+  if(!found.password){toast('No password set for this account. Contact admin.','error');return;}
+  if(found.password !== pass){toast('Wrong password.','error');return;}
   DB.currentUserId = found.id;
   saveDB();
   toast(isSA(found)?'★ Karibu Super Admin':'Karibu '+found.full_name);
@@ -661,10 +659,11 @@ function viewMembers(){
       h += '<button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button>';
       h += '</div></form></div>';
     } else {
+      var phoneDisplay = canEdit ? esc(m.phone) : '••••••••';
       h += '<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'">';
       h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
       h += '<div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3>';
-      h += '<p>'+(ROLES[m.role]||m.role)+' · '+esc(m.phone)+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
+      h += '<p>'+(ROLES[m.role]||m.role)+' · '+phoneDisplay+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
       h += '<span class="badge '+m.status+'">'+m.status+'</span>';
       if(canEdit){
         h += '<div class="member-actions">';
@@ -950,10 +949,11 @@ function viewAdmin(){
         h += '<button type="button" class="btn btn-outline" onclick="cancelEditMember()">Cancel</button>';
         h += '</div></form></div>';
       } else {
+        var phoneDisplay2 = esc(m.phone);
         h += '<div class="member-row'+(sa?'" style="background:#FDF6E3;margin:0 -20px;padding:14px 20px;border-radius:0':'')+'">';
         h += '<div class="member-avatar">'+esc(initials(m.full_name))+'</div>';
         h += '<div class="member-info"><h3>'+esc(m.full_name)+(sa?' <span class="badge super">★</span>':'')+'</h3>';
-        h += '<p>'+(ROLES[m.role]||m.role)+' · '+esc(m.phone)+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
+        h += '<p>'+(ROLES[m.role]||m.role)+' · '+phoneDisplay2+(m.family_id?' · '+esc(familyName(m.family_id)):'')+'</p></div>';
         h += '<span class="badge '+m.status+'">'+m.status+'</span>';
         h += '<div class="member-actions">';
         h += '<button class="btn btn-outline btn-sm" onclick="startEditMember(\''+m.id+'\')">'+icon('edit')+' Edit</button>';
@@ -1142,15 +1142,12 @@ function doRegister(e){
 function viewLogin(){
   return '<div class="card" style="max-width:440px;margin:24px auto">'+
     '<h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Sign in</h2>'+
-    '<p class="muted mb">Enter the phone number and password you registered with.</p>'+
+    '<p class="muted mb">Enter your phone number and password.</p>'+
     '<label class="field"><span>Phone number</span><input id="loginPhone" placeholder="07XX XXX XXX" type="tel" autocomplete="tel"></label>'+
-    '<label class="field"><span>Password</span><input id="loginPass" type="password" placeholder="Your password"></label>'+
+    '<label class="field"><span>Password</span><input id="loginPass" type="password" placeholder="Your password" autocomplete="current-password"></label>'+
     '<button class="btn btn-primary btn-block" onclick="doLogin()">Sign in</button>'+
     '<p class="muted small" style="text-align:center;margin-top:14px"><a onclick="go(\'register\')" style="color:var(--burgundy);cursor:pointer;font-weight:600">New here? Join BUKAKI</a></p>'+
-    '<div style="background:#FDF6E3;border:1px solid #F5E6C0;border-radius:12px;padding:14px;margin-top:16px">'+
-    '<p style="font-weight:600;color:var(--burgundy);font-size:13px">★ Super Admin (Vice Secretary)</p>'+
-    '<p class="muted small" style="margin-top:4px">Sign in with <b>0701248814</b> — no password needed.</p>'+
-    '</div></div>';
+    '</div>';
 }
 function render(){
   renderSidebar();
