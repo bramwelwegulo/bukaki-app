@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BUKAKI Sync Test</title>
+<style>
+body{font-family:system-ui;padding:20px;background:#fafaf9}
+.result{padding:14px;border-radius:10px;margin-bottom:10px;font-size:15px;font-weight:600}
+.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.bad{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.wait{background:#fef3c7;color:#78350f;border:1px solid #fcd34d}
+pre{background:#fff;padding:12px;border-radius:8px;font-size:12px;overflow-x:auto;border:1px solid #e7e5e4}
+</style>
+</head>
+<body>
+<h1>BUKAKI Sync Test</h1>
+
+<div id="r1" class="result wait">1. Loading Supabase library...</div>
+<div id="r2" class="result wait">2. Loading sync.js...</div>
+<div id="r3" class="result wait">3. Testing connection...</div>
+
+<pre id="output">Working...</pre>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var out = document.getElementById('output');
+var log = function(msg){ out.textContent += '\n' + msg; };
+
+setTimeout(function(){
+  var r1 = document.getElementById('r1');
+  if (window.supabase) {
+    r1.className = 'result ok';
+    r1.textContent = '1. ✅ Supabase library loaded. window.supabase exists.';
+    log('window.supabase = ' + typeof window.supabase);
+    log('createClient = ' + typeof window.supabase.createClient);
+  } else {
+    r1.className = 'result bad';
+    r1.textContent = '1. ❌ Supabase library FAILED to load. window.supabase is undefined.';
+    log('ERROR: window.supabase is ' + typeof window.supabase);
+  }
+}, 2000);
+
+setTimeout(function(){
+  var r2 = document.getElementById('r2');
+  if (window.cloudLoad && window.cloudSave) {
+    r2.className = 'result ok';
+    r2.textContent = '2. ✅ sync.js loaded. cloudLoad + cloudSave exist.';
+    log('cloudLoad = ' + typeof window.cloudLoad);
+    log('cloudSave = ' + typeof window.cloudSave);
+  } else {
+    r2.className = 'result bad';
+    r2.textContent = '2. ❌ sync.js FAILED. cloudLoad or cloudSave missing.';
+    log('cloudLoad = ' + typeof window.cloudLoad);
+    log('cloudSave = ' + typeof window.cloudSave);
+  }
+}, 3500);
+
+setTimeout(function(){
+  var r3 = document.getElementById('r3');
+  if (window.cloudLoad) {
+    window.cloudLoad().then(function(data){
+      if (data && data.families) {
+        r3.className = 'result ok';
+        r3.textContent = '3. ✅ Cloud reachable. Data has ' + (data.members||[]).length + ' members, ' + (data.events||[]).length + ' events.';
+        log('Cloud data loaded successfully');
+      } else if (data) {
+        r3.className = 'result ok';
+        r3.textContent = '3. ✅ Cloud reachable but data is empty.';
+      } else {
+        r3.className = 'result bad';
+        r3.textContent = '3. ❌ Cloud reachable but returned null. Check RLS / table.';
+      }
+    }).catch(function(e){
+      r3.className = 'result bad';
+      r3.textContent = '3. ❌ Cloud load error: ' + e.message;
+      log('Cloud error: ' + e.message);
+    });
+  } else {
+    r3.className = 'result bad';
+    r3.textContent = '3. ⏸ Skipped — sync.js not loaded.';
+  }
+}, 5000);
+</script>
+</body>
+</html>
