@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sync X</title>
+<style>
+body{font-family:sans-serif;padding:20px;font-size:16px}
+#out{background:#f5f5f5;padding:15px;border-radius:8px;white-space:pre-wrap;font-family:monospace;font-size:12px}
+</style>
+</head>
+<body>
+<h2>Sync Test X</h2>
+<div id="out">Loading...</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" onerror="document.getElementById('out').innerText='CDN FAILED'"></script>
+<script>
+var out = document.getElementById('out');
+out.innerText = 'Step 1: checking supabase...\n';
+try {
+  out.innerText += 'window.supabase = ' + typeof window.supabase + '\n';
+  var c = window.supabase.createClient(
+    'https://itjpfjlmyimbfbijucza.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0anBmamxteWxtYmZiaWp1Y3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyOTMyOTEsImV4cCI6MjEwNjg2OTI5MX0.zzQ93QQPz6kO2ailCXx1KvRHMim0KkWMoiWx6-wXhyc'
+  );
+  out.innerText += 'Step 2: client created\n';
+  c.from('bukaki_state').select('*').then(function(res){
+    out.innerText += 'Step 3: got response\n';
+    out.innerText += 'error: ' + JSON.stringify(res.error) + '\n';
+    out.innerText += 'status: ' + res.status + '\n';
+    out.innerText += 'rows: ' + (res.data ? res.data.length : 'null') + '\n';
+    if (res.data && res.data[0]) {
+      out.innerText += 'data keys: ' + Object.keys(res.data[0].data || {}).join(', ');
+    }
+  }).catch(function(e){
+    out.innerText += 'CATCH: ' + e.message;
+  });
+} catch(e) {
+  out.innerText += 'THREW: ' + e.message;
+}
+</script>
+</body>
+</html>
