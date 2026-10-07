@@ -2,84 +2,114 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BUKAKI Sync Test</title>
+<title>BUKAKI Sync Test v2</title>
 <style>
-body{font-family:system-ui;padding:20px;background:#fafaf9}
-.result{padding:14px;border-radius:10px;margin-bottom:10px;font-size:15px;font-weight:600}
+body{font-family:system-ui;padding:16px;background:#fafaf9}
+.r{padding:14px;border-radius:10px;margin-bottom:10px;font-size:15px;font-weight:600}
 .ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
 .bad{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-.wait{background:#fef3c7;color:#78350f;border:1px solid #fcd34d}
-pre{background:#fff;padding:12px;border-radius:8px;font-size:12px;overflow-x:auto;border:1px solid #e7e5e4}
+.warn{background:#fef3c7;color:#78350f;border:1px solid #fcd34d}
+pre{background:#fff;padding:12px;border-radius:8px;font-size:11px;overflow-x:auto;border:1px solid #e7e5e4}
 </style>
 </head>
 <body>
-<h1>BUKAKI Sync Test</h1>
+<h1>BUKAKI Sync Test v2</h1>
+<div id="r1" class="r warn">1. Loading Supabase library...</div>
+<div id="r2" class="r warn">2. Loading sync.js...</div>
+<div id="r3" class="r warn">3. Testing cloudLoad...</div>
+<div id="r4" class="r warn">4. Testing cloudSave...</div>
+<pre id="log">Log:</pre>
 
-<div id="r1" class="result wait">1. Loading Supabase library...</div>
-<div id="r2" class="result wait">2. Loading sync.js...</div>
-<div id="r3" class="result wait">3. Testing connection...</div>
-
-<pre id="output">Working...</pre>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="sync.js"></script>
 <script>
-var out = document.getElementById('output');
-var log = function(msg){ out.textContent += '\n' + msg; };
+var log = document.getElementById('log');
+function L(m){ log.textContent += '\n' + m; }
 
 setTimeout(function(){
-  var r1 = document.getElementById('r1');
-  if (window.supabase) {
-    r1.className = 'result ok';
-    r1.textContent = '1. ✅ Supabase library loaded. window.supabase exists.';
-    log('window.supabase = ' + typeof window.supabase);
-    log('createClient = ' + typeof window.supabase.createClient);
+  var r = document.getElementById('r1');
+  if(typeof window.supabase === 'object' && window.supabase && window.supabase.createClient){
+    r.className = 'r ok';
+    r.textContent = '1. ✅ Supabase library loaded';
+    L('window.supabase = object');
+    L('createClient = function');
   } else {
-    r1.className = 'result bad';
-    r1.textContent = '1. ❌ Supabase library FAILED to load. window.supabase is undefined.';
-    log('ERROR: window.supabase is ' + typeof window.supabase);
+    r.className = 'r bad';
+    r.textContent = '1. ❌ Supabase library missing';
+    L('FAIL: window.supabase = ' + typeof window.supabase);
   }
-}, 2000);
+}, 1500);
 
 setTimeout(function(){
-  var r2 = document.getElementById('r2');
-  if (window.cloudLoad && window.cloudSave) {
-    r2.className = 'result ok';
-    r2.textContent = '2. ✅ sync.js loaded. cloudLoad + cloudSave exist.';
-    log('cloudLoad = ' + typeof window.cloudLoad);
-    log('cloudSave = ' + typeof window.cloudSave);
+  var r = document.getElementById('r2');
+  if(typeof window.cloudLoad === 'function' && typeof window.cloudSave === 'function'){
+    r.className = 'r ok';
+    r.textContent = '2. ✅ sync.js loaded, cloudLoad + cloudSave ready';
+    L('cloudLoad = function');
+    L('cloudSave = function');
+    L('supabaseClient = ' + typeof window.supabaseClient);
   } else {
-    r2.className = 'result bad';
-    r2.textContent = '2. ❌ sync.js FAILED. cloudLoad or cloudSave missing.';
-    log('cloudLoad = ' + typeof window.cloudLoad);
-    log('cloudSave = ' + typeof window.cloudSave);
+    r.className = 'r bad';
+    r.textContent = '2. ❌ sync.js failed: cloudLoad=' + typeof window.cloudLoad + ', cloudSave=' + typeof window.cloudSave;
+    L('FAIL: sync.js did not define cloudLoad/cloudSave');
+    L('supabaseClient = ' + typeof window.supabaseClient);
   }
-}, 3500);
+}, 3000);
 
-setTimeout(function(){
-  var r3 = document.getElementById('r3');
-  if (window.cloudLoad) {
-    window.cloudLoad().then(function(data){
-      if (data && data.families) {
-        r3.className = 'result ok';
-        r3.textContent = '3. ✅ Cloud reachable. Data has ' + (data.members||[]).length + ' members, ' + (data.events||[]).length + ' events.';
-        log('Cloud data loaded successfully');
-      } else if (data) {
-        r3.className = 'result ok';
-        r3.textContent = '3. ✅ Cloud reachable but data is empty.';
-      } else {
-        r3.className = 'result bad';
-        r3.textContent = '3. ❌ Cloud reachable but returned null. Check RLS / table.';
-      }
-    }).catch(function(e){
-      r3.className = 'result bad';
-      r3.textContent = '3. ❌ Cloud load error: ' + e.message;
-      log('Cloud error: ' + e.message);
+setTimeout(async function(){
+  var r = document.getElementById('r3');
+  if(typeof window.cloudLoad !== 'function'){ r.className='r warn'; r.textContent='3. ⏸ Skipped'; return; }
+  try {
+    var data = await window.cloudLoad();
+    if(data){
+      var m = (data.members||[]).length, e = (data.events||[]).length;
+      r.className = 'r ok';
+      r.textContent = '3. ✅ cloudLoad works. Cloud: ' + m + ' members, ' + e + ' events.';
+      L('cloudLoad success: members=' + m + ', events=' + e);
+    } else {
+      r.className = 'r bad';
+      r.textContent = '3. ❌ cloudLoad returned null';
+      L('cloudLoad returned null');
+    }
+  } catch(err){
+    r.className = 'r bad';
+    r.textContent = '3. ❌ cloudLoad error: ' + err.message;
+    L('cloudLoad ERROR: ' + err.message);
+  }
+}, 4500);
+
+setTimeout(async function(){
+  var r = document.getElementById('r4');
+  if(typeof window.cloudSave !== 'function'){ r.className='r warn'; r.textContent='4. ⏸ Skipped'; return; }
+  try {
+    var test = await window.cloudLoad();
+    if(!test) test = {families:[], members:[], events:[], announcements:[], prayerIntentions:[], payments:[], loans:[], elections:[], candidacies:[], votes:[], warnings:[], amendments:[], attendance:[], currentUserId:null};
+    test.events = test.events || [];
+    test.events.push({
+      id: 'test_' + Date.now(),
+      title: 'Sync Test Event ' + new Date().toLocaleTimeString(),
+      description: 'Auto-generated test',
+      category: 'other',
+      starts_at: new Date().toISOString(),
+      location: 'Test',
+      semester: 'test'
     });
-  } else {
-    r3.className = 'result bad';
-    r3.textContent = '3. ⏸ Skipped — sync.js not loaded.';
+    var result = await window.cloudSave(test);
+    if(result){
+      r.className = 'r ok';
+      r.textContent = '4. ✅ cloudSave works! Cloud now has ' + (test.events.length) + ' events.';
+      L('cloudSave returned success');
+    } else {
+      r.className = 'r bad';
+      r.textContent = '4. ❌ cloudSave returned null (RLS issue)';
+      L('cloudSave returned null — check RLS policies');
+    }
+  } catch(err){
+    r.className = 'r bad';
+    r.textContent = '4. ❌ cloudSave error: ' + err.message;
+    L('cloudSave ERROR: ' + err.message);
   }
-}, 5000);
+}, 6000);
 </script>
 </body>
 </html>
