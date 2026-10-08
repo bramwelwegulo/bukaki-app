@@ -1,6 +1,6 @@
 // BUKAKI cloud sync via Supabase - MERGE version
 (function(){
-  var SUPABASE_URL = 'https://itjpfjlmyimbfbijucza.supabase.co';
+  var SUPABASE_URL = 'https://itjpfjlmylmbfbijucza.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0anBmamxteWxtYmZiaWp1Y3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyOTMyOTEsImV4cCI6MjEwNjg2OTI5MX0.zzQ93QQPz6kO2ailCXx1KvRHMim0KkWMoiWx6-wXhyc';
 
   window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
