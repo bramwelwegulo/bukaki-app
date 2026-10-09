@@ -178,7 +178,7 @@ textarea{resize:vertical;min-height:80px}
 </div>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="sync.js?v=4"></script>
+<script src="sync.js?v=5"></script>
 
 <script>
 var SUPER_ADMIN_PHONE = '254701248814';
@@ -204,6 +204,7 @@ function fmtDT(s){var d=new Date(s);return d.toLocaleString('en-KE',{day:'2-digi
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
 function normPhone(p){var s=String(p).replace(/[^0-9]/g,'');if(s.indexOf('254')===0)return s;if(s.indexOf('0')===0)return'254'+s.slice(1);if(s.length===9)return'254'+s;return s;}
 function toLocalInput(iso){var d=new Date(iso),pad=function(n){return String(n).padStart(2,'0');};return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());}
+function parseDateLocal(v){if(!v)return null;var m=v.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);var d=new Date(v);return isNaN(d.getTime())?null:d;}
 function datePill(s){var d=new Date(s);var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return '<div class="date-pill"><div class="d-month">'+m[d.getMonth()]+'</div><div class="d-day">'+String(d.getDate()).padStart(2,'0')+'</div></div>';}
 function initials(n){return String(n||'?').split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();}
 function catLabel(c){return CAT_LABELS[c]||c.replace(/_/g,' ');}
@@ -233,7 +234,7 @@ function assignLeadership(role,memberId){for(var i=0;i<DB.members.length;i++){if
 function doLogin(){var phone=normPhone(document.getElementById('loginPhone').value);var pass=document.getElementById('loginPass').value;var found=null;for(var i=0;i<DB.members.length;i++){if(DB.members[i].phone===phone){found=DB.members[i];break;}}if(!found){toast('No member found. Please sign up.','error');return;}if(!found.password){toast('No password set. Contact admin.','error');return;}if(found.password!==pass){toast('Wrong password.','error');return;}DB.currentUserId=found.id;saveDB();toast(isSA(found)?'★ Karibu Super Admin':'Karibu '+found.full_name);go('dashboard');}
 function logout(){DB.currentUserId=null;saveDB();toast('Signed out.');go('dashboard');}
 function affirmOath(){var m=me();if(!m)return;m.oath_accepted_at=new Date().toISOString();saveDB();toast('Oath affirmed.');render();}
-function createEvent(e){e.preventDefault();try{var title=document.getElementById('evTitle').value.trim();var cat=document.getElementById('evCat').value;var dt=document.getElementById('evTime').value;var loc=document.getElementById('evLoc').value.trim();var desc=document.getElementById('evDesc').value.trim();if(!title||!dt){toast('Title and time required.','error');return;}var d=new Date(dt);if(isNaN(d.getTime())){alert('Bad date value: '+dt);return;}var newEvent={id:uid('e'),title:title,description:desc||null,category:cat,starts_at:d.toISOString(),location:loc||null,semester:sem(),created_by:DB.currentUserId};DB.events.push(newEvent);saveDB();toast('Event published.');render();}catch(err){alert('Create event error: '+err.message);}}
+function createEvent(e){e.preventDefault();try{var title=document.getElementById('evTitle').value.trim();var cat=document.getElementById('evCat').value;var dt=document.getElementById('evTime').value;var loc=document.getElementById('evLoc').value.trim();var desc=document.getElementById('evDesc').value.trim();if(!title||!dt){toast('Title and time required.','error');return;}var d=parseDateLocal(dt);if(!d){alert('Bad date: '+dt);return;}DB.events.push({id:uid('e'),title:title,description:desc||null,category:cat,starts_at:d.toISOString(),location:loc||null,semester:sem(),created_by:DB.currentUserId});saveDB();toast('Event published.');render();}catch(err){alert('Error: '+err.message);}}
 function deleteEvent(id){if(!confirm('Delete event?'))return;DB.events=DB.events.filter(function(x){return x.id!==id;});saveDB();toast('Deleted.');render();}
 function createAnnouncement(e){e.preventDefault();var title=document.getElementById('anTitle').value.trim();var body=document.getElementById('anBody').value.trim();var pinned=document.getElementById('anPinned').checked;if(!title||!body){toast('Title and body required.','error');return;}DB.announcements.unshift({id:uid('a'),title:title,body:body,pinned:pinned,created_at:new Date().toISOString(),created_by:DB.currentUserId});saveDB();toast('Published.');render();}
 function deleteAnnouncement(id){if(!confirm('Delete announcement?'))return;DB.announcements=DB.announcements.filter(function(x){return x.id!==id;});saveDB();toast('Deleted.');render();}
