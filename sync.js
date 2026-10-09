@@ -1,4 +1,4 @@
-// BUKAKI cloud sync via Supabase - MERGE version
+// BUKAKI cloud sync via Supabase - with error reporting
 (function(){
   var SUPABASE_URL = 'https://itjpfjlmylmbfbijucza.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0anBmamxteWxtYmZiaWp1Y3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyOTMyOTEsImV4cCI6MjEwNjg2OTI5MX0.zzQ93QQPz6kO2ailCXx1KvRHMim0KkWMoiWx6-wXhyc';
@@ -8,9 +8,9 @@
   window.cloudLoad = async function(){
     try {
       var res = await window.supabaseClient.from('bukaki_state').select('data').eq('id','main').single();
-      if (res.error) return null;
+      if (res.error) { console.error('cloudLoad error', res.error); return null; }
       return res.data ? res.data.data : null;
-    } catch(e) { return null; }
+    } catch(e) { console.error('cloudLoad exception', e); return null; }
   };
 
   function mergeArrays(cloud, local){
@@ -35,14 +35,24 @@
   window.cloudSave = async function(data){
     try {
       var cur = await window.supabaseClient.from('bukaki_state').select('data').eq('id','main').single();
+      if (cur.error) { console.error('cloudSave read error', cur.error); return null; }
       var cloudData = (cur.data && cur.data.data) ? cur.data.data : {};
       var merged = mergeDB(cloudData, data);
-      await window.supabaseClient.from('bukaki_state')
+
+      var upd = await window.supabaseClient.from('bukaki_state')
         .update({ data: merged, updated_at: new Date().toISOString() })
-        .eq('id', 'main');
+        .eq('id', 'main')
+        .select();
+
+      if (upd.error) {
+        alert('Cloud save FAILED:\n' + JSON.stringify(upd.error));
+        console.error('cloudSave update error', upd.error);
+        return null;
+      }
       return merged;
     } catch(e) {
-      console.error('Cloud save failed', e);
+      alert('Cloud save exception:\n' + e.message);
+      console.error('cloudSave exception', e);
       return null;
     }
   };
